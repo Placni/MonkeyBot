@@ -3,62 +3,63 @@ const Discord = require('discord.js');
 const math = require(`mathjs`);
 
 module.exports = {
-    name: "shutup",
-    description: "server mutes the targeted user(s)",
-    usage: `\`${process.env.PREFIX}shutup <target> <channel> <time>\``,
+    name: "shutuptest",
+    description: "server mutes the targeted user",
+    usage: `\`${process.env.PREFIX}shutup @user\``,
     category: "General",
-    alias: ["shutup", "silence"],
+    alias: ["shutuptest"],
     disabled: false,
     execute(message, args){ 
-        let comname = "shutup";
 
-        //permision check
-        if (!(message.author.id == process.env.OWNERID || message.member.hasPermission('MUTE_MEMBERS', 'ADMINISTRATOR'))){
-            message.reply(" you don't have the permission to call this!");
+        let comname = "shutup";
+        if (message.author != process.env.OWNERID){
+            message.reply(" you must be the owner to call this!");
             common.logerror(message, comname, "invalid permision");
             return;
         }
+
         
-        //init vars
-        let targetChannelTemp;
-        let targetTemp = args.shift();
-
-        let target;
         let time;
-        var targetChannel;
+        let target;
+        let targetChannel;
+        let vcList;
 
-        //check what the user wants to target (all or single user)
+        let targetTemp = args.shift();
+        console.log(targetTemp);
+
         if (!targetTemp){
             message.reply(" specify a person you monkey");
+            common.logerror(message, comname, "no specified user");
             return;
         } else {
-            if(targetTemp == 'all'){
-                targetChannelTemp = args.shift();
-                targetChannelTemp = common.GetVcID(targetChannelTemp, message);
-                if(!targetChannelTemp){
+            if(targetTemp == "all") {
+                target = "all"
+                targetChannel = common.GetVcID(args.shift())
+                if (!targetChannel){
                     message.reply(" couldn't find desired channel!");
                     common.logerror(message, comname, "couldn't find desired channel");
                     return;
                 }
-                targetChannel = targetChannelTemp.members;
-                target = 'all'
+                vcList = targetChannel.members;
+                vcList = vcList.array();
+                console.log(vcList);
             } else {
-              target = common.GetUserID(targetTemp, message);
+                target = common.GetUserID(targetTemp, message);
                 if (!target){
                     message.reply(" couldn't find desired user!");
                     common.logerror(message, comname, "couldn't find desired user");
                     return;
-                }  
+                }
             }
         }
 
-        //set time and sanitize
+        
+
         let timeTemp = common.ArgsToString(args);
         timeTemp = Number(timeTemp);
         if (!timeTemp || !math.isNumeric(timeTemp) || timeTemp > 10){
             time = 5000;
         } else {
-            timeTemp = math.ceil(timeTemp);
             time = (timeTemp * 1000);
         }
 
@@ -90,18 +91,10 @@ module.exports = {
             ToggleMute(target);
           }
 
-        //mutes user(s) based on target type
-        if(target == 'all'){
-            for(let [snowflake, guildMember] of targetChannel){
-                PlsShutUp(guildMember, time);
-                message.channel.send(`**${guildMember.user.tag}** has been silenced for **${(time / 1000)}s**`);
-            }
-            common.logsuccess(message, comname, `target: ${target} channel: ${targetChannelTemp.name} time: ${time}ms`);
-          } else {
-            PlsShutUp(target, time);
-            message.channel.send(`**${target.user.tag}** has been silenced for **${(time / 1000)}s**`);
-            common.logsuccess(message, comname, `target: ${target.user.tag} time: ${time}ms`);
-        }
-          
+
+          PlsShutUp(target, time);
+          message.channel.send(`**${target.user.tag}** has been silenced for **${(time / 1000)}s**`);
+          common.logsuccess(message, comname, `user = ${target.user.tag} time = ${time}ms`);
+
     }
 }

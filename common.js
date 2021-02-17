@@ -31,14 +31,24 @@ function GetUserID(input, message){
     return user;
 }
 
-    function ArgsToString(args){
-        newArgs = args.length > 1 ? args.join(" ") : args;
-        return String(newArgs);
+function GetVcID(input, message){
+    let vc = message.guild.channels.cache.get(input);
+
+    if (vc == null){
+        vc = message.guild.channels.cache.filter(channel => channel.name.toLowerCase().includes(input) && channel.type === "voice").first();
     }
+    return vc;
+}
+
+function ArgsToString(args){
+    newArgs = args.length > 1 ? args.join(" ") : args;
+    return String(newArgs);
+}
 
 module.exports = {
     logerror,
     logsuccess,
     GetUserID,
+    GetVcID,
     ArgsToString
     }
