@@ -5,9 +5,6 @@ const fs = require('fs');
 require('log-timestamp');
 require('dotenv').config();
 
-var auth = require('./auth.json');
-var package = require('./package.json');
-
 const prefix = process.env.PREFIX;
 
 client.commands = new Discord.Collection();
@@ -27,20 +24,14 @@ client.on('message', message =>{
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
  
-    if(command === 'getpfp'){
-        client.commands.get('getpfp').execute(message, args, client);
-    } else if(command === 'setup'){
-        client.commands.get('setup').execute(message);
-    } else if(command === 'bal'){
-        client.commands.get('bal').execute(message, args);
-    } else if(command === 'coinflip'){
-        client.commands.get('coinflip').execute(message, args);
-    } else if(command === 'help'){
-        client.commands.get('help').execute(message, args);
-    } else if(command === 'rainbow'){
-        client.commands.get('rainbow').execute(message, args);
-    } else if(command === 'test'){
-        client.commands.get('test').execute(message, args);
+    for (c of client.commands) {
+        if (command == c[0] || (c[1].alias !== undefined && Object.values(c[1].alias).includes(command))) {
+            if (c[1].disabled == true) {
+                message.reply(" that command is disabled");
+            } else {
+                client.commands.get(c[0]).execute(message, args);
+            }
+        }
     }
 });
 

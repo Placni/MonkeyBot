@@ -10,7 +10,35 @@ function logsuccess(message, comname, xtra){
     console.log(colors.green(author + " called ") + colors.cyan(comname) + colors.green(" successfully: " + xtra));
 }
 
+function GetUserID(input, message){
+    let newInput = input.toLowerCase();
+    let user = message.guild.members.cache.get(input);
+
+    //from displayname
+    if (!user) {
+        user = message.guild.members.cache.filter(u => u.displayName.toLowerCase().includes(newInput)).first();
+    }
+    //by username
+    if (!user) {
+        user = message.guild.members.cache.filter(u => u.user.username.toLowerCase().includes(newInput)).first();
+    }
+    //from mention
+    if (!user) {
+        if (message.mentions.users.size) {
+            user = message.guild.members.cache.get(message.mentions.users.first().id);
+        }
+    }
+    return user;
+}
+
+    function ArgsToString(args){
+        newArgs = args.length > 1 ? args.join(" ") : args;
+        return String(newArgs);
+    }
+
 module.exports = {
     logerror,
-    logsuccess
+    logsuccess,
+    GetUserID,
+    ArgsToString
     }
