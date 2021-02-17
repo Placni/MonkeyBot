@@ -2,25 +2,25 @@ const common = require('../common');
 const Discord = require('discord.js');
 
 module.exports = {
-    name: "setstatus",
-    description: "Sets the status of the bot",
-    usage: `\`${process.env.PREFIX}setstatus "<type> <message>"\``,
+    name: "setdisplayname",
+    description: "Sets the display name of the bot",
+    usage: `\`${process.env.PREFIX}setdisplayname "<name>"\``,
     category: "Admin",
-    alias: ["setstatus", "status"],
+    alias: ["setdisplayname", "displayname", "username"],
     disabled: false,
     execute(message, args){
-        let comname = "setstatus";
+        let comname = "setdisplayname";
         if (message.author != process.env.OWNERID){
             message.reply(" you must be the owner to call this!");
             return;
         }
 
         let client = message.client;
-        let type = args.shift();
-        let str = common.ArgsToString(args);
+        let newName = args.shift();
 
-        client.user.setActivity(str, { type: type.toUpperCase() })
-            .then(common.logsuccess(message, comname, `type = ${type} string = ${str}`))
+        client.user
+            .setUsername(newName)
+            .then(common.logsuccess(message, comname, `newName: ${newName}`))
             .catch(error => {
                 message.reply(error.message);
             });
