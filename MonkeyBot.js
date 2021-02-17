@@ -15,7 +15,7 @@ for(const file of commandFiles){
 }
 
 client.once('ready', () => {
-    console.log('MonkeyBot Online' .rainbow);
+    console.log('MonkeyBot Online' .magenta);
 });
 
 client.on('message', message =>{
@@ -28,6 +28,7 @@ client.on('message', message =>{
         if (command == c[0] || (c[1].alias !== undefined && Object.values(c[1].alias).includes(command))) {
             if (c[1].disabled == true) {
                 message.reply(" that command is disabled");
+                return;
             } else {
                 client.commands.get(c[0]).execute(message, args);
             }

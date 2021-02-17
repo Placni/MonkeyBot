@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: "getpfp",
-    description: "grabs pfp of user",
+    description: "grabs pfp of a user",
     usage: `\`${process.env.PREFIX}getpfp @user\``,
     category: "Utils",
     alias: ["getpfp", "pfp", "avatar"],
