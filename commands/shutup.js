@@ -2,6 +2,8 @@ const common = require('../common');
 const Discord = require('discord.js');
 const math = require(`mathjs`);
 
+//THIS COMMAND WILL RATE LIMIT THE BOT IF USED IN A CHANNEL WITH OVER 5 PEOPLE
+
 module.exports = {
     name: "shutup",
     description: "server mutes the targeted user(s)",

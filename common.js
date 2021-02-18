@@ -2,7 +2,7 @@ const colors = require('colors');
 
 function logerror(message, comname, error){
     let author = message.author.tag;
-    console.log(colors.red(author + " called ") + colors.cyan(comname) + colors.red(" unsuccessfuly with error: " + error));
+    console.log(colors.red(author + " called ") + colors.cyan(comname) + colors.red(" with error: " + error));
 }
 
 function logsuccess(message, comname, xtra){
