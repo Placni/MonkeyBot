@@ -9,7 +9,6 @@ module.exports = {
     alias: ["getpfp", "pfp", "avatar"],
     disabled: false,
     execute(message, args){ 
-        var comname = "getpfp";
         let format = { format: "png", dynamic: true, size: 2048 };
         let argString = common.ArgsToString(args);
         let target;
@@ -20,7 +19,7 @@ module.exports = {
             target = common.GetUserID(argString, message);
             if (!target){
                 message.reply(" couldn't find desired user!");
-                common.logerror(message, comname, "couldn't find desired user");
+                common.logerror(message, this.name, "couldn't find desired user");
                 return;
             }
         }
@@ -33,6 +32,6 @@ module.exports = {
         .setTimestamp()
 
         message.channel.send(pfpEmbed);
-        common.logsuccess(message, comname, "");
+        common.logsuccess(message, this.name, "");
     }
 }

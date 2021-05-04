@@ -9,7 +9,6 @@ module.exports = {
     alias: ["setstatus", "status"],
     disabled: false,
     execute(message, args){
-        let comname = "setstatus";
         if (message.author != process.env.OWNERID){
             message.reply(" you must be the owner to call this!");
             return;
@@ -20,7 +19,7 @@ module.exports = {
         let str = common.ArgsToString(args);
 
         client.user.setActivity(str, { type: type.toUpperCase() })
-            .then(common.logsuccess(message, comname, `type = ${type} string = ${str}`))
+            .then(common.logsuccess(message, this.name, `type = ${type} string = ${str}`))
             .catch(error => {
                 message.reply(error.message);
             });

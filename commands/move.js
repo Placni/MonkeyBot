@@ -9,12 +9,10 @@ module.exports = {
     alias: ["move", "moveall"],
     disabled: false,
     execute(message, args){ 
-        let comname = "move"
-
         //permision check
         if (!(message.author.id == process.env.OWNERID || message.member.hasPermission('MOVE_MEMBERS', 'ADMINISTRATOR'))){
             message.reply(" you don't have the permission to call this!");
-            common.logerror(message, comname, "invalid permision");
+            common.logerror(message, this.name, "invalid permision");
             return;
         }
 
@@ -35,7 +33,7 @@ module.exports = {
             destinationVCTemp = common.GetVcID(destinationVCTemp, message);
             if (!origVCTemp || !destinationVCTemp){
             message.reply(" couldn't find desired VC(s)!");
-            common.logerror(message, comname, "couldn't find desired channel(s)");
+            common.logerror(message, this.name, "couldn't find desired channel(s)");
             return;
             }
 
@@ -46,19 +44,19 @@ module.exports = {
             target = common.GetUserID(target, message);
             if(!target){
             message.reply(" couldn't find desired user!");
-            common.logerror(message, comname, "couldn't find desired user");
+            common.logerror(message, this.name, "couldn't find desired user");
             return;
             }
             if(!target.voice.channel){
             message.reply(" user is not in a VC!");
-            common.logerror(message, comname, "target not connected to voice");
+            common.logerror(message, this.name, "target not connected to voice");
             return;
             }
             destinationVCTemp = args.shift();
             destinationVCTemp = common.GetVcID(destinationVCTemp, message);
             if(!destinationVCTemp){
             message.reply(" couldn't find desired channel!");
-            common.logerror(message, comname, "couldn't find desired channel");
+            common.logerror(message, this.name, "couldn't find desired channel");
             return;
             }
             destinationVC = destinationVCTemp;
@@ -70,12 +68,12 @@ module.exports = {
             guildMember.voice.setChannel(destinationVC);
             message.channel.send(` **${guildMember.user.tag}** has been moved from **${origVCTemp.name}** to **${destinationVCTemp.name}**`);
             }
-            common.logsuccess(message, comname, `target: ${target} origVC: ${origVCTemp.name} destVC: ${destinationVCTemp.name}`);
+            common.logsuccess(message, this.name, `target: ${target} origVC: ${origVCTemp.name} destVC: ${destinationVCTemp.name}`);
         } else {
             let old = target.voice.channel;
             target.voice.setChannel(destinationVC);
             message.channel.send(` **${target.user.tag}** has been moved from **${old.name}** to **${destinationVCTemp.name}**`);
-            common.logsuccess(message, comname, `target: ${target.user.tag} origVC: ${old.name} destVC: ${destinationVCTemp.name}`);
+            common.logsuccess(message, this.name, `target: ${target.user.tag} origVC: ${old.name} destVC: ${destinationVCTemp.name}`);
         }
     }
 }

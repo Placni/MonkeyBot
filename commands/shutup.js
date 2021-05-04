@@ -12,12 +12,10 @@ module.exports = {
     alias: ["shutup", "silence"],
     disabled: false,
     execute(message, args){ 
-        let comname = "shutup";
-
         //permision check
         if (!(message.author.id == process.env.OWNERID || message.member.hasPermission('MUTE_MEMBERS', 'ADMINISTRATOR'))){
             message.reply(" you don't have the permission to call this!");
-            common.logerror(message, comname, "invalid permision");
+            common.logerror(message, this.name, "invalid permision");
             return;
         }
         
@@ -39,7 +37,7 @@ module.exports = {
                 targetChannelTemp = common.GetVcID(targetChannelTemp, message);
                 if(!targetChannelTemp){
                     message.reply(" couldn't find desired channel!");
-                    common.logerror(message, comname, "couldn't find desired channel");
+                    common.logerror(message, this.name, "couldn't find desired channel");
                     return;
                 }
                 targetChannel = targetChannelTemp.members;
@@ -48,7 +46,7 @@ module.exports = {
               target = common.GetUserID(targetTemp, message);
                 if (!target){
                     message.reply(" couldn't find desired user!");
-                    common.logerror(message, comname, "couldn't find desired user");
+                    common.logerror(message, this.name, "couldn't find desired user");
                     return;
                 }  
             }
@@ -67,7 +65,7 @@ module.exports = {
         function ToggleMute(target){
             if (!target.voice.channel){
                 message.reply(" that user isn't in vc you monkey");
-                common.logerror(message, comname, "user not in vc")
+                common.logerror(message, this.name, "user not in vc")
                 return false;
             }
             let isMuted = target.voice.serverMute
@@ -98,12 +96,11 @@ module.exports = {
                 PlsShutUp(guildMember, time);
                 message.channel.send(`**${guildMember.user.tag}** has been silenced for **${(time / 1000)}s**`);
             }
-            common.logsuccess(message, comname, `target: ${target} channel: ${targetChannelTemp.name} time: ${time}ms`);
+            common.logsuccess(message, this.name, `target: ${target} channel: ${targetChannelTemp.name} time: ${time}ms`);
           } else {
             PlsShutUp(target, time);
             message.channel.send(`**${target.user.tag}** has been silenced for **${(time / 1000)}s**`);
-            common.logsuccess(message, comname, `target: ${target.user.tag} time: ${time}ms`);
-        }
-          
+            common.logsuccess(message, this.name, `target: ${target.user.tag} time: ${time}ms`);
+        } 
     }
 }

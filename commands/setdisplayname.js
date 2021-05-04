@@ -9,7 +9,6 @@ module.exports = {
     alias: ["setdisplayname", "displayname", "username"],
     disabled: false,
     execute(message, args){
-        let comname = "setdisplayname";
         if (message.author != process.env.OWNERID){
             message.reply(" you must be the owner to call this!");
             return;
@@ -20,7 +19,7 @@ module.exports = {
 
         client.user
             .setUsername(newName)
-            .then(common.logsuccess(message, comname, `newName: ${newName}`))
+            .then(common.logsuccess(message, this.name, `newName: ${newName}`))
             .catch(error => {
                 message.reply(error.message);
             });
