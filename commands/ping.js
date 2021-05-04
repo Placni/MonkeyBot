@@ -5,7 +5,7 @@ module.exports = {
     name: "ping",
     description: "responds with latency measurements",
     usage: `\`${process.env.PREFIX}ping\``,
-    category: "Utils",
+    category: "Utility",
     alias: ["ping", "latency"],
     disabled: false,
     execute(message, args){

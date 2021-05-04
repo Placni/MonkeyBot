@@ -5,7 +5,7 @@ module.exports = {
     name: "test",
     description: "a test command!",
     usage: `\`${process.env.PREFIX}test\``,
-    category: "Test",
+    category: "Admin",
     alias: ["test", "test1", "test2"],
     disabled: false,
     execute(message, args){ 
