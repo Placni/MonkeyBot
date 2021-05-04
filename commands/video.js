@@ -1,4 +1,4 @@
-const common = require('../common.js');
+const common = require('../util/common');
 const Discord = require('discord.js');
 const youtubedl = require('youtube-dl');
 const fs = require('fs');

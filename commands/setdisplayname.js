@@ -1,4 +1,4 @@
-const common = require('../common');
+const common = require('../util/common');
 const Discord = require('discord.js');
 
 module.exports = {
