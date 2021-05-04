@@ -3,19 +3,19 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: "setdisplayname",
-    description: "Sets the display name of the bot",
+    description: "sets the display name of the bot",
     usage: `\`${process.env.PREFIX}setdisplayname "<name>"\``,
     category: "Admin",
-    alias: ["setdisplayname", "displayname", "username"],
+    alias: ["setdisplayname", "displayname", "username", "name"],
     disabled: false,
     execute(message, args){
-        if (message.author != process.env.OWNERID){
+        if (message.author.id !== process.env.OWNERID){
             message.reply(" you must be the owner to call this!");
             return;
         }
 
         let client = message.client;
-        let newName = args.shift();
+        let newName = args.join(" ");
 
         client.user
             .setUsername(newName)

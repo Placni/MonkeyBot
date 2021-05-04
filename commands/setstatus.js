@@ -3,13 +3,13 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: "setstatus",
-    description: "Sets the status of the bot",
+    description: "sets the status of the bot",
     usage: `\`${process.env.PREFIX}setstatus "<type> <message>"\``,
     category: "Admin",
     alias: ["setstatus", "status"],
     disabled: false,
     execute(message, args){
-        if (message.author != process.env.OWNERID){
+        if (message.author.id !== process.env.OWNERID){
             message.reply(" you must be the owner to call this!");
             return;
         }
