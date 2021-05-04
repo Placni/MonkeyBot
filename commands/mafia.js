@@ -1,0 +1,49 @@
+const common = require('../common');
+const Discord = require('discord.js');
+const math = require('mathjs');
+
+module.exports = {
+    name: "mafia",
+    description: "randomly selects villagers and mafia-men from the vc",
+    usage: `\`${process.env.PREFIX}mafia\``,
+    category: "General",
+    alias: ["mafia"],
+    disabled: false,
+    execute(message, args){ 
+        let vc = message.member.voice.channel;
+        let randGen = [];
+
+        if (vc && vc.members.size >= 3){
+            let mafiaCount = math.ceil(vc.members.size / 3);
+            for (i = 1; i <= vc.members.size; i++){
+                randGen.push(0);
+            }
+            for (i = 0; i <= (mafiaCount - 1); i++){
+                randGen[i] = 1;
+            }
+            let ii = 0
+            for(let [snowflake, guildMember] of vc.members){
+                const str = randGen[ii] == 0 ? `You've been selected to be a **villager**!` : `You've been selected to be part of the **mafia**!`;
+                guildMember.send(str);
+                ii++;
+            }
+            common.logsuccess(message, this.name, "");
+        } else {
+            message.reply(" you must be in a voice channel with at least 3 people!");
+            common.logerror(message, this.name, "invalid vc / vc size");
+            return;
+        }
+        //Fisher-Yates Shuffle
+        function shuffle(array){
+            var currentIndex = array.length, tempVal, randomIndex;
+            while (0 !== currentIndex){
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+                tempVal = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = tempVal;
+            }
+            return array;
+        }
+    }
+}

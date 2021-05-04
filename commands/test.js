@@ -1,5 +1,6 @@
 const common = require('../common.js');
-const Discord = require ('discord.js');
+const Discord = require('discord.js');
+const math = require('mathjs');
 
 module.exports = {
     name: "test",
@@ -9,7 +10,6 @@ module.exports = {
     alias: ["test", "test1", "test2"],
     disabled: false,
     execute(message, args){ 
-
-      
+       
     }
 }
