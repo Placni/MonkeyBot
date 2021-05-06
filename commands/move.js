@@ -15,7 +15,7 @@ module.exports = {
             common.logerror(message, this.name, "invalid permision");
             return;
         }
-
+        if (!args[0]) return message.reply(" specify a person or channel you monkey")
         //init vars
         let origVCMembers
         var origVCTemp
