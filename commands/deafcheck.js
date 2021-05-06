@@ -24,7 +24,7 @@ module.exports = {
 
         let i = 0
         for(let [snowflake, guildMember] of targetChannel.members){
-            if(guildMember.voice.Selfdeaf){
+            if(guildMember.voice.selfDeaf){
                 guildMember.voice.setChannel(null);
                 message.channel.send(`**${guildMember.user.tag}** was removed from vc for being deafened`);
                 guildMember.send(`**${message.author.tag}** removed you from vc for being deafened`);

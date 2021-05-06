@@ -11,7 +11,7 @@ function logsuccess(message, comname, xtra){
 }
 
 function GetUserID(input, message){
-    let newInput = input.toLowerCase();
+    let newInput = input.toString().toLowerCase();
     let user = message.guild.members.cache.get(input);
 
     //from displayname
