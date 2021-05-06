@@ -15,14 +15,12 @@ module.exports = {
             common.logerror(message, this.name, "invalid permision");
             return;
         }
-        if (!args[0]) return message.reply(" specify a person or channel you monkey")
+        if (!args[0]) return message.reply(" specify a target you monkey");
         //init vars
         let origVCMembers
         var origVCTemp
-            
         let destinationVCTemp
         var destinationVC
-        
         let target = args.shift();
 
         //check what the user wants to target (all or single user); as well as channel(s)
@@ -44,20 +42,17 @@ module.exports = {
             target = common.GetUserID(target, message);
             if(!target){
             message.reply(" couldn't find desired user!");
-            common.logerror(message, this.name, "couldn't find desired user");
-            return;
+            return common.logerror(message, this.name, "couldn't find desired user");
             }
             if(!target.voice.channel){
             message.reply(" user is not in a VC!");
-            common.logerror(message, this.name, "target not connected to voice");
-            return;
+            return common.logerror(message, this.name, "target not connected to voice");
             }
             destinationVCTemp = args.shift();
             destinationVCTemp = common.GetVcID(destinationVCTemp, message);
             if(!destinationVCTemp){
             message.reply(" couldn't find desired channel!");
-            common.logerror(message, this.name, "couldn't find desired channel");
-            return;
+            return common.logerror(message, this.name, "couldn't find desired channel");
             }
             destinationVC = destinationVCTemp;
         }

@@ -10,6 +10,8 @@ module.exports = {
     alias: ["test", "test1", "test2"],
     disabled: false,
     execute(message, args){ 
-       
+        let targetChannel = common.GetVcID(args.shift(), message);
+        let vc = message.member.voice.channel;
+        console.log(targetChannel.members.size);
     }
 }
