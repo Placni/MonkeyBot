@@ -52,16 +52,20 @@ module.exports = {
          .setTimestamp()
          
         const msg = await message.channel.send(InitialEmbed)
-        msg.react("1️⃣").then(() => msg.react("2️⃣")).then(() => msg.react("3️⃣"));
+        msg.react("⭐").then(() => msg.react("1️⃣")).then(() => msg.react("2️⃣")).then(() => msg.react("3️⃣"));
 
         const filter = (reaction, user) => {
-            return ["1️⃣", "2️⃣", "3️⃣"].includes(reaction.emoji.name) && user.id === message.author.id;
+            return ["⭐","1️⃣", "2️⃣", "3️⃣"].includes(reaction.emoji.name) && user.id === message.author.id;
         }
 
         const collector = msg.createReactionCollector(filter, { time: 20000});
 
         collector.on('collect', (reaction, user) => {
             switch(reaction.emoji.name){
+                case "⭐":
+                    msg.edit(InitialEmbed);
+                    ClearReactions(msg, message.author.id);
+                break;
                 case "1️⃣":
                     msg.edit(UtilityEmbed);
                     ClearReactions(msg, message.author.id);
