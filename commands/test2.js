@@ -4,19 +4,15 @@ const math = require('mathjs');
 const guildSettings = require('../schema/guildSchema');
 
 module.exports = {
-    name: "test",
+    name: "test2",
     description: "a test command!",
-    usage: `\`${process.env.PREFIX}test\``,
+    usage: `\`${process.env.PREFIX}test2\``,
     category: "Admin",
-    alias: ["test"],
+    alias: ["test2"],
     disabled: false,
-    async execute(message, args){ 
+    cache: {},
+    async execute(message, args, client){ 
         
-        let result = await guildSettings.create({
-            _id: message.guild.id,
-            prefix: '-',
-        });
-        result.save();
-
+        
     }
 }

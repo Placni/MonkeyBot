@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const colors = require('colors');
 require('log-timestamp');
 require('dotenv').config();
 

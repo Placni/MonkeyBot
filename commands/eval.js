@@ -8,7 +8,7 @@ module.exports = {
     category: "Admin",
     alias: ["eval"],
     disabled: false,
-    execute(message, args){
+    execute(message, args, client){
         if (message.author.id !== process.env.OWNERID){
             message.reply(" you must be the owner to call this!");
             return;
