@@ -6,7 +6,7 @@ const guildSettings = require('../../schema/guildSchema');
 module.exports = async (Discord, client, message) => {
     if(!message.guild || message.author.bot) return;
 
-    //TODO: make tracking more efficient
+    //TODO: make tracking more efficient (Summer of GOTO?)
     
     let words = await client.commands.get('trackword').wordCheck(message, client);
     if (words.length > 0){

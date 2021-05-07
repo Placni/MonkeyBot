@@ -14,17 +14,15 @@ module.exports = {
     async execute(message, client, words){ 
         //TODO: find out how to query mongoose for a specific object instead of pushing all the info at once
 
-        message.reply(" track called!");
         let userdata = await dbhelper.getGuildUserProfile(message, words);
         words.forEach(element => {
             let occurences = (message.content.split(element).length - 1);
+            if (occurences > 5) occurences = 5;
             if (!userdata.trackers[element]){
                 userdata.trackers[element] = occurences;
             } else userdata.trackers[element] += occurences;
-            console.log(`found ${occurences} occurences of str: ${element}`);
         });
         dbhelper.globalCache[message.guild.id].userinfo[message.author.id] = userdata;
-
         await guildSettings.findOneAndUpdate(
             {
                 _id: message.guild.id
