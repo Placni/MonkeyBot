@@ -2,6 +2,7 @@ const common = require('../util/common');
 const Discord = require('discord.js');
 const math = require('mathjs');
 const guildSettings = require('../schema/guildSchema');
+const dbhelper = require('../util/dbhelper');
 
 module.exports = {
     name: "test",
@@ -10,13 +11,9 @@ module.exports = {
     category: "Admin",
     alias: ["test"],
     disabled: false,
-    async execute(message, args){ 
+    execute(message, args, client){ 
         
-        let result = await guildSettings.create({
-            _id: message.guild.id,
-            prefix: '-',
-        });
-        result.save();
+        console.log(dbhelper.globalCache[message.guild.id]);
 
     }
 }

@@ -1,7 +1,7 @@
 const guildSettings = require('../schema/guildSchema');
+const dbhelper = require('../util/dbhelper');
 const common = require('../util/common');
 const Discord = require('discord.js');
-const math = require('mathjs');
 
 module.exports = {
     name: "prefix",
@@ -29,32 +29,20 @@ module.exports = {
                 _id: message.guild.id
             },
             {
-                _id: message.guild.id,
                 prefix: newPrefix,
             },
-            {
-                upsert: true,
-            }
         );
         message.reply(` changed prefix to \`${newPrefix}\``);
-        this.cache[message.guild.id] = newPrefix;
+        dbhelper.globalCache[message.guild.id].prefix = newPrefix;
     },
 
     async prefixCheck(message){
         let prefix;
-        if (!this.cache[message.guild.id]){
-            let settings = await guildSettings.findOne({ _id: message.guild.id });
-            if (!settings){
-                settings = await guildSettings.create({
-                    _id: message.guild.id,
-                    prefix: '-',
-                });
-                await settings.save();
-            }
-            this.cache[message.guild.id] = settings.prefix;
-            return prefix = this.cache[message.guild.id];
+        if (!dbhelper.globalCache[message.guild.id]){
+            await dbhelper.getGuildSettings(message);
+            return prefix = dbhelper.globalCache[message.guild.id].prefix;
         } else {
-            return prefix = this.cache[message.guild.id];
+            return prefix = dbhelper.globalCache[message.guild.id].prefix;
         }
     }
 }

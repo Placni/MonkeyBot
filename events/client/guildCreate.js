@@ -1,9 +1,13 @@
+const dbhelper = require('../../util/dbhelper');
 const guildSettings = require('../../schema/guildSchema');
 
 module.exports = async(Discord, client, guild) => {
-    let profile = await guildSettings.create({
+    let settings = await guildSettings.create({
         _id: guild.id,
         prefix: '-',
-    });
-    profile.save();
+        trackedwords: [],
+        userinfo: {placeholder: "placeholder"},
+    })
+    settings.save();
+    dbhelper.globalCache[guild.id] = settings;
 }
