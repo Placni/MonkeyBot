@@ -7,7 +7,7 @@ module.exports = {
     name: "prefix",
     description: "set the command prefix for your server",
     usage: `\`${process.env.PREFIX}prefix <prefix>\``,
-    category: "Utility",
+    category: "GuildSettings",
     alias: ["prefix", "p"],
     disabled: false,
     permission: ['ADMINISTRATOR'],

@@ -7,16 +7,11 @@ module.exports = {
     name: "trackword",
     description: "add or delete a word to track in your server",
     usage: `\`${process.env.PREFIX}trackword <add/delete/clear> <word>\``,
-    category: "Admin",
+    category: "GuildSettings",
     alias: ["trackword"],
     disabled: false,
     permission: ['ADMINISTRATOR'],
     async execute(message, args){ 
-        //TODO: Create common function that caches mongo profile for each guild
-        if (!(message.author.id == process.env.OWNERID || message.member.hasPermission('ADMINISTRATOR'))){
-            message.reply(" you don't have the permission to call this!");
-            return common.logerror(message, this.name, "invalid permision");
-        }   
         
         let words;
         switch (args[0]){

@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: "move",
-    description: "move a single user to a vc or all users in one vc",
+    description: "move user(s) from one vc to another",
     usage: `\`${process.env.PREFIX}move <target> <vc1> <vc2>\``,
     category: "General",
     alias: ["move", "moveall"],

@@ -14,6 +14,7 @@ module.exports = async (Discord, client, message) => {
     //add per role command whitelist?
     //rewrite old messy commands (like move holy shit what was I doing)
     //finish video.js
+    //DONE: create common function that caches mongo profile for each guild
     
     let words = await client.commands.get('trackword').wordCheck(message);
     if (words.length > 0){
