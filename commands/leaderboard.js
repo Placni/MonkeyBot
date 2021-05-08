@@ -27,7 +27,7 @@ module.exports = {
                 vals.push(obj.trackers[desiredBoard]);
             }
         }
-        let str2 = vals.join(`\n`);
+        
 
         let str = "";
         vals.sort((a, b) => {return b-a});
@@ -36,6 +36,7 @@ module.exports = {
                 if(num == e) str += (userid + `\n`);
             }
         });
+        let str2 = vals.join(`\n`);
         var temparr = str.split('\n')
         str = temparr.filter((value, index, self) => {
             return self.indexOf(value) === index;
@@ -44,13 +45,12 @@ module.exports = {
         const leaderEmbed = new Discord.MessageEmbed()
             .setColor('#803d8f')
             .setAuthor(`Leaderboard for "${desiredBoard}"`, message.guild.iconURL({ format: "png", dynamic: true, size: 2048 }))
-            //.setDescription(`Showing leaderboard for "${desiredBoard}"`)
             .addFields(
                 {name: 'Top 10', value: str, inline: true},
                 {name: '\u200B', value: '\u200B', inline: true},
                 {name: 'Count', value: str2, inline: true}
             )
-            .setFooter(`Requested by ${message.author.tag}`, message.author.avatarURL({ format: "png", dynamic: true, size: 2048 }))
+            .setFooter(`Requested by ${message.author.tag}`)
         message.channel.send(leaderEmbed);
     }
 }

@@ -1,14 +1,21 @@
 const colors = require('colors');
-const track = require('../../commands/track');
 const guildSettings = require('../../schema/guildSchema');
+const common = require('../../util/common');
 
 
 module.exports = async (Discord, client, message) => {
     if(!message.guild || message.author.bot) return;
 
-    //TODO: make tracking more efficient (Summer of GOTO?)
+    //TODO:
+    //
+    //make tracking more efficient (Summer of GOTO?)
+    //DONE: implement better permission check
+    //implement cooldowns
+    //add per role command whitelist?
+    //rewrite old messy commands (like move holy shit what was I doing)
+    //finish video.js
     
-    let words = await client.commands.get('trackword').wordCheck(message, client);
+    let words = await client.commands.get('trackword').wordCheck(message);
     if (words.length > 0){
         if (new RegExp(words.join("|")).test(message.content)) {
             console.log(`Match using "${message.content}"`);
@@ -30,11 +37,13 @@ module.exports = async (Discord, client, message) => {
                         message.reply(" that command is disabled");
                         return;
                     } else {
-                        try {
-                            client.commands.get(c[0]).execute(message, args, client); 
-                        } catch (err) {
-                            return console.log(err);
-                        }
+                        if (c[1].permission == undefined || c[1].permission.some(common.PermissionCheck(message.member, c[1].permission))) {
+                            try {
+                                client.commands.get(c[0]).execute(message, args, client); 
+                            } catch (err) {
+                                return console.log(err);
+                            }   
+                        } else return message.reply(` missing permission: \`${c[1].permission.join(", ")}\``);
                     }
                 }
             }

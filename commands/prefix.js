@@ -10,12 +10,8 @@ module.exports = {
     category: "Utility",
     alias: ["prefix", "p"],
     disabled: false,
-    cache: {},
+    permission: ['ADMINISTRATOR'],
     async execute(message, args){ 
-        if (!(message.author.id == process.env.OWNERID || message.member.hasPermission('ADMINISTRATOR'))){
-            message.reply(" you don't have the permission to call this!");
-            return common.logerror(message, this.name, "invalid permision");
-        }
         if(!args.length){
             await this.prefixCheck(message).then(prefix => {
                 return message.reply(` your current prefix is \`${prefix}\``);

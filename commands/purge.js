@@ -9,12 +9,8 @@ module.exports = {
     category: "General",
     alias: ["clear", "purge"],
     disabled: false,
+    permission: ['MANAGE_MESSAGES'],
     async execute(message, args){ 
-        if (!(message.author.id == process.env.OWNERID || message.member.hasPermission('DELETE_MESSAGES', 'ADMINISTRATOR'))){
-            message.reply(" you don't have the permission to call this!");
-            common.logerror(message, this.name, "invalid permision");
-            return;
-        }
         if(!args[0]) return message.reply(" please specify an amount!");
         if(isNaN(args[0]) || (args[0] < 1)) return message.reply(" please enter a valid number!");
         if(args[0] > 100) return message.reply(" I can only clear 100 messages at a time!");

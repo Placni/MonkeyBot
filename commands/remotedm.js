@@ -10,11 +10,7 @@ module.exports = {
     alias: ["remotedm", "dm"],
     disabled: false,
     execute(message, args){ 
-        if (!(message.author.id == process.env.OWNERID)){
-            message.reply(" you don't have the permission to call this!");
-            common.logerror(message, this.name, "invalid permision");
-            return;
-        }
+        if (message.author.id !== process.env.OWNERID) return message.reply(" you must be the owner to use this!");
 
         if(!args) return message.reply(" specify a target!");
         let target = common.GetUserID(args.shift(), message);

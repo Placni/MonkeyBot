@@ -9,13 +9,8 @@ module.exports = {
     category: "Admin",
     alias: ["deafcheck"],
     disabled: false,
+    permission: ['MOVE_MEMBERS'],
     execute(message, args){ 
-        if (!(message.author.id == process.env.OWNERID || message.member.hasPermission('MOVE_MEMBERS', 'ADMINISTRATOR'))){
-            message.reply(" you don't have the permission to call this!");
-            common.logerror(message, this.name, "invalid permision");
-            return;
-        }
-
         if(!args[0]) return message.reply(" specify a channel you monkey");
 
         let targetChannel = common.GetVcID(args.shift(), message);

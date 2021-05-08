@@ -45,10 +45,15 @@ function ArgsToString(args){
     return String(newArgs);
 }
 
+function PermissionCheck(target, permission){
+    return (hasPermission = permission => target.hasPermission(permission));
+}
+
 module.exports = {
     logerror,
     logsuccess,
     GetUserID,
     GetVcID,
-    ArgsToString
+    ArgsToString,
+    PermissionCheck
     }

@@ -11,14 +11,11 @@ module.exports = {
     category: "General",
     alias: ["shutup", "silence"],
     disabled: false,
+    permission: ['MUTE_MEMBERS'],
     execute(message, args){ 
-        //permision check
-        if (!(message.author.id == process.env.OWNERID || message.member.hasPermission('MUTE_MEMBERS', 'ADMINISTRATOR'))){
-            message.reply(" you don't have the permission to call this!");
-            common.logerror(message, this.name, "invalid permision");
-            return;
-        }
-        
+        //TODO:
+        //rewrite this as well jesus
+
         //init vars
         let targetChannelTemp;
         let targetTemp = args.shift();

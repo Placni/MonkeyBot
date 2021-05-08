@@ -10,10 +10,7 @@ module.exports = {
     alias: ["eval"],
     disabled: false,
     execute(message, args, client){
-        if (message.author.id !== process.env.OWNERID){
-            message.reply(" you must be the owner to call this!");
-            return;
-        }
+        if (message.author.id !== process.env.OWNERID) return message.reply(" you must be the owner to call this!");
 
         try {
             const code = args.join(" ");

@@ -10,7 +10,7 @@ module.exports = {
     category: "Admin",
     alias: ["trackword"],
     disabled: false,
-    cache: {},
+    permission: ['ADMINISTRATOR'],
     async execute(message, args){ 
         //TODO: Create common function that caches mongo profile for each guild
         if (!(message.author.id == process.env.OWNERID || message.member.hasPermission('ADMINISTRATOR'))){
@@ -68,7 +68,7 @@ module.exports = {
         }
     },
 
-    async wordCheck(message, client){
+    async wordCheck(message){
         let words;
         if (!dbhelper.globalCache[message.guild.id]){
             await dbhelper.getGuildSettings(message);
