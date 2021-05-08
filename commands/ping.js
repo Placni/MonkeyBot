@@ -8,8 +8,9 @@ module.exports = {
     category: "Utility",
     alias: ["ping", "latency"],
     disabled: false,
-    execute(message, args){
+    async execute(message, args){
         let client = message.client;
-        message.channel.send(`🏓 Pong! \nLatency is **${Date.now() - message.createdTimestamp}ms** \nAPI Latency is **${Math.round(client.ws.ping)}ms**`);
+        let resMsg = await message.channel.send('Resolving...');
+        resMsg.edit(`🏓 Pong! \nLatency is **${Math.round((resMsg.createdTimestamp - message.createdTimestamp) - client.ws.ping)}ms**`);
     }
 }
