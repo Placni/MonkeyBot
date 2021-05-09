@@ -27,8 +27,6 @@ module.exports = {
                 vals.push(obj.trackers[desiredBoard]);
             }
         }
-        
-
         let str = "";
         vals.sort((a, b) => {return b-a});
         if(vals.length > 9) vals = vals.slice(9, vals.length);
