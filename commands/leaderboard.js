@@ -31,6 +31,7 @@ module.exports = {
 
         let str = "";
         vals.sort((a, b) => {return b-a});
+        if(vals.length > 9) vals = vals.slice(9, vals.length);
         vals.forEach(e => {
             for (const [userid, num] of Object.entries(tracked)){
                 if(num == e) str += (userid + `\n`);
