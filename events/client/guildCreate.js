@@ -6,6 +6,7 @@ module.exports = async(Discord, client, guild) => {
         _id: guild.id,
         prefix: '-',
         trackedwords: [],
+        blacklist: [],
         userinfo: {placeholder: "placeholder"},
     })
     settings.save();

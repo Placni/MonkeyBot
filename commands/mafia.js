@@ -1,4 +1,3 @@
-const common = require('../util/common');
 const Discord = require('discord.js');
 const math = require('mathjs');
 
@@ -22,17 +21,14 @@ module.exports = {
                 randGen[i] = 1;
             }
             let ii = 0
+            randGen = shuffle(randGen);
             for(let [snowflake, guildMember] of vc.members){
                 const str = randGen[ii] == 0 ? `You've been selected to be a **villager**!` : `You've been selected to be part of the **mafia**!`;
                 guildMember.send(str);
                 ii++;
             }
-            common.logsuccess(message, this.name, "");
-        } else {
-            message.reply(" you must be in a voice channel with at least 3 people!");
-            common.logerror(message, this.name, "invalid vc / vc size");
-            return;
-        }
+        } else return message.reply(" you must be in a voice channel with at least 3 people!");
+        
         //Fisher-Yates Shuffle
         function shuffle(array){
             var currentIndex = array.length, tempVal, randomIndex;

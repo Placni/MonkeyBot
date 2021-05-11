@@ -1,6 +1,7 @@
 const colors = require('colors');
 const guildSettings = require('../../schema/guildSchema');
 const common = require('../../util/common');
+const dbhelper = require('../../util/dbhelper');
 
 
 module.exports = async (Discord, client, message) => {
@@ -14,7 +15,9 @@ module.exports = async (Discord, client, message) => {
             }
         }
         return;
-    } 
+    }
+    let blacklist = dbhelper.globalCache[message.guild.id].blacklist;
+    if(blacklist.includes(message.author.id)) return message.reply(' seems like you have been blacklisted from using me!');
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
     for (c of client.commands) {

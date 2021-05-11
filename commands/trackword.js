@@ -10,7 +10,7 @@ module.exports = {
     category: "GuildSettings",
     alias: ["trackword"],
     disabled: false,
-    permission: ['ADMINISTRATOR'],
+    permission: ['MANAGE_MESSAGES'],
     async execute(message, args){ 
         
         let words;
