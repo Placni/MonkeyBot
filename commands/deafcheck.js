@@ -1,6 +1,5 @@
 const common = require('../util/common');
 const Discord = require('discord.js');
-const math = require('mathjs');
 
 module.exports = {
     name: "deafcheck",
@@ -18,14 +17,15 @@ module.exports = {
         if(targetChannel.members.size == 0) return message.reply(" the target channel must have users in it!");
 
         let i = 0
+        let channel = common.GetVcID('afk', message);
+        if(!channel) channel = null;
         for(let [snowflake, guildMember] of targetChannel.members){
             if(guildMember.voice.selfDeaf){
-                guildMember.voice.setChannel(null);
+                guildMember.voice.setChannel(channel);
                 message.channel.send(`**${guildMember.user.tag}** was removed from vc for being deafened`);
                 guildMember.send(`**${message.author.tag}** removed you from vc for being deafened`);
                 i++;
             }
         }
-        common.logsuccess(message, this.name, `removed ${i} members from vc`);
     }
 }

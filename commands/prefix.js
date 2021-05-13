@@ -1,6 +1,5 @@
 const guildSettings = require('../schema/guildSchema');
 const dbhelper = require('../util/dbhelper');
-const common = require('../util/common');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -8,7 +7,7 @@ module.exports = {
     description: "set the command prefix for your server",
     usage: `\`${process.env.PREFIX}prefix <prefix>\``,
     category: "GuildSettings",
-    alias: ["prefix", "p"],
+    alias: ["prefix"],
     disabled: false,
     permission: ['ADMINISTRATOR'],
     async execute(message, args){ 

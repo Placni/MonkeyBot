@@ -10,6 +10,7 @@ module.exports = {
     category: "GuildSettings",
     alias: ["bl"],
     disabled: false,
+    permission: ['ADMINISTRATOR'],
     async execute(message, args){ 
         if(message.author.id !== process.env.OWNERID) return message.reply(' you must be the owner to use this!');
         if(!args.length){

@@ -43,7 +43,9 @@ module.exports = async (Discord, client, message) => {
     //add per command embeds for help command
     //DONE: implement better permission check
     //implement cooldowns
-    //add per role command whitelist?
+    //DONE: add per role command whitelist?
+        //added blacklist on the bot itself per user
+    //add roles to blacklist
     //rewrite old messy commands (like move holy shit what was I doing)
     //finish video.js
     //DONE: create common function that caches mongo profile for each guild
