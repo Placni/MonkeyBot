@@ -36,16 +36,3 @@ module.exports = async (Discord, client, message) => {
         }
     }
 }
-    //TODO:
-    //
-    //DONE: make tracking more efficient (Summer of GOTO?)
-    //rewrite help command to work variably
-    //add per command embeds for help command
-    //DONE: implement better permission check
-    //implement cooldowns
-    //DONE: add per role command whitelist?
-        //added blacklist on the bot itself per user
-    //add roles to blacklist
-    //rewrite old messy commands (like move holy shit what was I doing)
-    //finish video.js
-    //DONE: create common function that caches mongo profile for each guild

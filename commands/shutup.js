@@ -13,9 +13,6 @@ module.exports = {
     disabled: false,
     permission: ['MUTE_MEMBERS'],
     execute(message, args){ 
-        //TODO:
-        //rewrite this as well jesus
-
         let targetChannel;
         let target = args.shift();
         let time;
