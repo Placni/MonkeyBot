@@ -6,7 +6,7 @@ const dbhelper = require('../../util/dbhelper');
 
 module.exports = async (Discord, client, message) => {
     if(!message.guild || message.author.bot) return;
-    let prefix = await client.commands.get('prefix').prefixCheck(message)
+    let prefix = await client.commands.get('prefix').prefixCheck(message);
     if(!message.content.startsWith(prefix)) {
         let words = await client.commands.get('trackword').wordCheck(message);
         if (words.length > 0){
@@ -35,7 +35,7 @@ module.exports = async (Discord, client, message) => {
             }
         }
     }
-}    
+}
     //TODO:
     //
     //DONE: make tracking more efficient (Summer of GOTO?)

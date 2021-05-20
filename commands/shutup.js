@@ -16,57 +16,35 @@ module.exports = {
         //TODO:
         //rewrite this as well jesus
 
-        //init vars
-        let targetChannelTemp;
-        let targetTemp = args.shift();
-
-        let target;
+        let targetChannel;
+        let target = args.shift();
         let time;
-        var targetChannel;
 
-        //check what the user wants to target (all or single user)
-        if (!targetTemp){
-            message.reply(" specify a person you monkey");
-            return;
+        if (!target) return message.reply(" specify a person you monkey");
+        if (target == 'all'){
+            targetChannel = args.shift();
+            targetChannel = common.GetVcID(targetChannel, message);
+            if(!targetChannel) return message.reply(" couldn't find desired channel!"); 
+            target = 'all'
         } else {
-            if(targetTemp == 'all'){
-                targetChannelTemp = args.shift();
-                targetChannelTemp = common.GetVcID(targetChannelTemp, message);
-                if(!targetChannelTemp){
-                    message.reply(" couldn't find desired channel!");
-                    common.logerror(message, this.name, "couldn't find desired channel");
-                    return;
-                }
-                targetChannel = targetChannelTemp.members;
-                target = 'all'
-            } else {
-              target = common.GetUserID(targetTemp, message);
-                if (!target){
-                    message.reply(" couldn't find desired user!");
-                    common.logerror(message, this.name, "couldn't find desired user");
-                    return;
-                }  
-            }
+            target = common.GetUserID(target, message);
+            if (!target) return message.reply(" couldn't find desired user!");               
         }
 
-        //set time and sanitize
-        let timeTemp = common.ArgsToString(args);
-        timeTemp = Number(timeTemp);
-        if (!timeTemp || !math.isNumeric(timeTemp) || timeTemp > 10){
+        time = Number(time);
+        if (!time || !math.isNumeric(time) || time > 10){
             time = 5000;
         } else {
-            timeTemp = math.ceil(timeTemp);
-            time = (timeTemp * 1000);
+            time = math.ceil(time);
+            time = (time * 1000);
         }
 
         function ToggleMute(target){
             if (!target.voice.channel){
                 message.reply(" that user isn't in vc you monkey");
-                common.logerror(message, this.name, "user not in vc")
                 return false;
             }
-            let isMuted = target.voice.serverMute
-            if (!isMuted){
+            if (!target.voice.serverMute){
                 target.voice.setMute(true, "");
             } else {
                 target.voice.setMute(false, "");
@@ -80,24 +58,20 @@ module.exports = {
           }
         async function PlsShutUp(target, ms) {
             let done = ToggleMute(target);
-            if (!done){
-                return;
-            }
+            if (!done) return;
             await sleep(ms);
             ToggleMute(target);
-          }
+        }
 
         //mutes user(s) based on target type
         if(target == 'all'){
-            for(let [snowflake, guildMember] of targetChannel){
+            for(let [snowflake, guildMember] of targetChannel.members){
                 PlsShutUp(guildMember, time);
                 message.channel.send(`**${guildMember.user.tag}** has been silenced for **${(time / 1000)}s**`);
             }
-            common.logsuccess(message, this.name, `target: ${target} channel: ${targetChannelTemp.name} time: ${time}ms`);
           } else {
             PlsShutUp(target, time);
             message.channel.send(`**${target.user.tag}** has been silenced for **${(time / 1000)}s**`);
-            common.logsuccess(message, this.name, `target: ${target.user.tag} time: ${time}ms`);
         } 
     }
 }
