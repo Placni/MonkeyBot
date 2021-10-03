@@ -6,7 +6,7 @@ module.exports = {
     description: "sets the status of the bot",
     usage: `\`${process.env.PREFIX}setstatus "<type> <message>"\``,
     category: "Admin",
-    alias: ["setstatus", "status"],
+    alias: ["status"],
     disabled: false,
     execute(message, args){
         if (message.author.id !== process.env.OWNERID){

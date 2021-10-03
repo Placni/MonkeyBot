@@ -3,30 +3,31 @@ const guildSettings = require('../schema/guildSchema');
 module.exports = {
     globalCache: {},
     async getGuildSettings(message) {
-        if(!this.globalCache[message.guild.id]){
-            let settings = await guildSettings.findOne({ _id: message.guild.id });
+        let guildID = (!message.guild.id) ? message : message.guild.id;
+        if(!this.globalCache[guildID]){
+            let settings = await guildSettings.findOne({ _id: guildID });
             if(!settings){
                 settings = await guildSettings.create({
-                    _id: message.guild.id,
+                    _id: guildID,
                     prefix: '-',
                     trackedwords: [],
                     userinfo: {placeholder: 'placeholder'},
                 })
                 settings.save();
             }
-            this.globalCache[message.guild.id] = settings;
-            return this.globalCache[message.guild.id];
-        } else return this.globalCache[message.guild.id];
+            this.globalCache[guildID] = settings;
+            return this.globalCache[guildID];
+        } else return this.globalCache[guildID];
     },
 
-    async getGuildUserProfile(message, words) {
-        let userdata
-        if(!this.globalCache[message.guild.id].userinfo[message.author.id]){
+    async getGuildUserProfile(message, words, target) {
+        let userdata;
+        if(!this.globalCache[message.guild.id].userinfo[target]){
             let trackers = {};
             words.forEach(element => {
                 trackers[element] = 0;
             });
-            this.globalCache[message.guild.id].userinfo[message.author.id] = {trackers: trackers}
+            this.globalCache[message.guild.id].userinfo[target] = {trackers: trackers}
             await guildSettings.findOneAndUpdate(
                 {
                     _id: message.guild.id,
@@ -35,7 +36,7 @@ module.exports = {
                     userinfo: this.globalCache[message.guild.id].userinfo,
                 },
             )
-            return userdata = this.globalCache[message.guild.id].userinfo[message.author.id];
-        } else return userdata = this.globalCache[message.guild.id].userinfo[message.author.id];
+            return userdata = this.globalCache[message.guild.id].userinfo[target];
+        } else return userdata = this.globalCache[message.guild.id].userinfo[target];
     }
 }

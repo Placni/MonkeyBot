@@ -6,7 +6,7 @@ module.exports = {
     description: "displays your guild leaderboards!",
     usage: `\`${process.env.PREFIX}test\``,
     category: "GuildSettings",
-    alias: ["board"],
+    alias: ["board", "lb"],
     disabled: false,
     execute(message, args){ 
         if(!dbhelper.globalCache[message.guild.id]) dbhelper.getGuildSettings;
@@ -14,30 +14,32 @@ module.exports = {
         let possibleBoards = guildinfo.trackedwords;
 
         if(!args.length) return message.reply(' specify a leaderboard to view!');
-        if(!possibleBoards.includes(args[0])) return message.reply(` you are not tracking that! \n Use \`${guildinfo.prefix}trackword\` to see what you are tracking`);
+        if(!possibleBoards.includes(args[0]) && args[0] !== 'L') return message.reply(` you are not tracking that! \n Use \`${guildinfo.prefix}trackword\` to see what you are tracking`);
         let desiredBoard = args[0];
 
         let vals = [];
         let tracked = {};
         for (const [userid, obj] of Object.entries(guildinfo.userinfo)){
             if(userid !== 'placeholder' || !obj) {
-                tracked[`<@!${userid}>`] = obj.trackers[desiredBoard];
+                tracked[`<@${userid}>`] = obj.trackers[desiredBoard];
                 vals.push(obj.trackers[desiredBoard]);
             }
         }
+
         let str = "";
         vals.sort((a, b) => {return b-a});
-        if(vals.length > 9) vals = vals.slice(10, vals.length);
+        if(vals.length >= 10) vals = vals.slice(10, vals.length);
         vals.forEach(e => {
             for (const [userid, num] of Object.entries(tracked)){
                 if(num == e) str += (userid + `\n`);
             }
         });
+
         let str2 = vals.join(`\n`);
-        var temparr = str.split('\n')
+        var temparr = str.split('\n');
         str = temparr.filter((value, index, self) => {
             return self.indexOf(value) === index;
-        })
+        });
         
         const leaderEmbed = new Discord.MessageEmbed()
             .setColor('#803d8f')

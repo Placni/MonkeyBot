@@ -6,7 +6,7 @@ module.exports = {
     description: "grabs the avatar of a user",
     usage: `\`${process.env.PREFIX}getpfp <user>\``,
     category: "General",
-    alias: ["getpfp", "pfp", "avatar"],
+    alias: ["pfp", "avatar", "av"],
     disabled: false,
     execute(message, args){ 
         let format = { format: "png", dynamic: true, size: 2048 };

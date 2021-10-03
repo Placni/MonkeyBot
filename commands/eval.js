@@ -7,7 +7,7 @@ module.exports = {
     description: "remotely run code from command",
     usage: `\`${process.env.PREFIX}eval "<code>"\``,
     category: "Admin",
-    alias: ["eval"],
+    alias: [],
     disabled: false,
     execute(message, args, client){
         if (message.author.id !== process.env.OWNERID) return message.reply(" you must be the owner to call this!");

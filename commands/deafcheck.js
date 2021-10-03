@@ -6,7 +6,7 @@ module.exports = {
     description: "moves deafened users out of the vc",
     usage: `\`${process.env.PREFIX}deafcheck <channel>\``,
     category: "Admin",
-    alias: ["deafcheck"],
+    alias: ["deaf"],
     disabled: false,
     permission: ['MOVE_MEMBERS'],
     execute(message, args){ 

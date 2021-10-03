@@ -10,18 +10,16 @@ module.exports = {
     usage: `\`${process.env.PREFIX}tookl <user>\``,
     category: "General",
     alias: ["tookl"],
-    disabled: true,
+    disabled: false,
     async execute(message, args){ 
-        
         if(!args.length) return message.reply(' specify a user!');
 
         let target = args.shift();
         target = common.GetUserID(target, message);
-        if(!target) return message.reply(' couldnt find target!');
+        if(!target) return message.reply(' couldnt find target user!');
         
         if(!dbhelper.globalCache[message.guild.id]) await dbhelper.getGuildSettings(message);
-        let userdata = await dbhelper.getGuildUserProfile(message, target.user.id, dbhelper.globalCache[message.guild.id].trackedwords);
-        console.log(userdata);
+        let userdata = await dbhelper.getGuildUserProfile(message, dbhelper.globalCache[message.guild.id].trackedwords, target.user.id);
         if(!userdata.trackers['L']){
             userdata.trackers['L'] = 1;
         } else userdata.trackers['L'] += 1;

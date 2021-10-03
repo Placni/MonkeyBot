@@ -7,7 +7,7 @@ module.exports = {
     description: "purges messages from the chat",
     usage: `\`${process.env.PREFIX}purge <value>\``,
     category: "Utility",
-    alias: ["clear", "purge"],
+    alias: ["clear"],
     disabled: false,
     permission: ['MANAGE_MESSAGES'],
     async execute(message, args){ 

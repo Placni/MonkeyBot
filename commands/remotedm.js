@@ -7,7 +7,7 @@ module.exports = {
     description: "dms a user from the bot",
     usage: `\`${process.env.PREFIX}remotedm\``,
     category: "Admin",
-    alias: ["remotedm", "dm"],
+    alias: ["dm"],
     disabled: false,
     execute(message, args){ 
         if (message.author.id !== process.env.OWNERID) return message.reply(" you must be the owner to use this!");

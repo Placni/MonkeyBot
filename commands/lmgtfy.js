@@ -5,7 +5,7 @@ module.exports = {
     description: "let me google that for you",
     usage: `\`${process.env.PREFIX}lmgtfy <text>\``,
     category: "General",
-    alias: ["lmgtfy"],
+    alias: [],
     disabled: false,
     execute(message, args){ 
         if(!args.length) return message.reply(" specify something to google!");

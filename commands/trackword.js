@@ -21,7 +21,7 @@ module.exports = {
                 if(args.some(item => words.includes(item))) return message.reply(` you are already tracking that word!`);
                 words = words.concat(args);
                 await updateWords(words);
-                return message.reply(` you are now tracking **${dbhelper.globalCache[message.guild.id].trackedwords.join(', ')}**`);
+                return message.reply(wordsEmbed(dbhelper.globalCache[message.guild.id].trackedwords));
             break;
             case "del":
             case "delete":
@@ -34,7 +34,7 @@ module.exports = {
                 await updateWords(words);
                 if(!dbhelper.globalCache[message.guild.id].trackedwords.length){
                     return message.reply(` your server is currently not tracking any words!`);
-                } else return message.reply(` you are now tracking **${dbhelper.globalCache[message.guild.id].trackedwords.join(', ')}**`);
+                } else return message.reply(wordsEmbed(dbhelper.globalCache[message.guild.id].trackedwords));
             break;
             case "clear":
                 words = [];
@@ -45,11 +45,22 @@ module.exports = {
                 await this.wordCheck(message).then(words => {
                     if(!words.length){
                         return message.reply(` your server is not tracking any words!`);
-                    } else return message.reply(` your server is tracking: **${words.join(', ')}**`);
+                    } else return message.reply(wordsEmbed(dbhelper.globalCache[message.guild.id].trackedwords));
                 })
                 return;
             break;
         }
+
+        function wordsEmbed(list){
+            let words = list.join(`\n`);
+            const wordsEmbed = new Discord.MessageEmbed()
+            .setColor('#803d8f')
+            .setAuthor("Currently Tracking:", message.guild.iconURL({ format: "png", dynamic: true, size: 2048 }))
+            .addField(words, '\u200b')
+            .setFooter(`Use \`${dbhelper.globalCache[message.guild.id].prefix}leaderboard {word}\` to check the leaderboards`)
+            return wordsEmbed;
+        }
+
         async function updateWords(words){
             dbhelper.globalCache[message.guild.id].trackedwords = words;
             await guildSettings.findOneAndUpdate(

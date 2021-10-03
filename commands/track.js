@@ -8,7 +8,7 @@ module.exports = {
     description: "util to track words",
     usage: `\`${process.env.PREFIX}track\``,
     category: "Admin",
-    alias: ["track"],
+    alias: [],
     disabled: true,
     cache: {},
     async execute(message, client, words){ 

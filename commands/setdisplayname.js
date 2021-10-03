@@ -6,7 +6,7 @@ module.exports = {
     description: "sets the display name of the bot",
     usage: `\`${process.env.PREFIX}setdisplayname "<name>"\``,
     category: "Admin",
-    alias: ["setdisplayname", "displayname", "username", "name"],
+    alias: ["displayname", "username", "name"],
     disabled: false,
     execute(message, args){
         if (message.author.id !== process.env.OWNERID){

@@ -6,7 +6,7 @@ module.exports = {
     description: "displays a list of currently usable commands",
     usage: `\`${process.env.PREFIX}help\``,
     category: "Utility",
-    alias: ["help", "commands", "h"],
+    alias: ["commands", "h"],
     disabled: false,
     async execute(message, args){
         let client = message.client;

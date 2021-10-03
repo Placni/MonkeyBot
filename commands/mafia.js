@@ -6,7 +6,7 @@ module.exports = {
     description: "randomly selects villagers and mafia-men from the vc",
     usage: `\`${process.env.PREFIX}mafia\``,
     category: "General",
-    alias: ["mafia"],
+    alias: [],
     disabled: false,
     execute(message, args){ 
         let vc = message.member.voice.channel;

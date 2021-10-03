@@ -6,7 +6,7 @@ module.exports = {
     description: "responds with latency measurements",
     usage: `\`${process.env.PREFIX}ping\``,
     category: "Utility",
-    alias: ["ping", "latency"],
+    alias: ["latency"],
     disabled: false,
     async execute(message, args){
         let client = message.client;

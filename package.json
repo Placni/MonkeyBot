@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Discord bot hobby project",
   "main": "MonkeyBot.js",
-  "author": "Myssto#1000",
+  "author": "Myssto#0001",
   "dependencies": {
     "colors": "^1.4.0",
     "discord.js": "^12.5.1",
