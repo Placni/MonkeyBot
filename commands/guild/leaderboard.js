@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const dbhelper = require('../util/dbhelper');
+const dbhelper = require('@util/dbhelper');
 
 module.exports = {
     name: "leaderboard",

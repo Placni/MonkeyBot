@@ -1,8 +1,8 @@
-const common = require('../util/common');
+const common = require('@util/common');
 const Discord = require('discord.js');
 const math = require('mathjs');
-const guildSettings = require('../schema/guildSchema');
-const dbhelper = require('../util/dbhelper');
+const guildSettings = require('@schema/guildSchema');
+const dbhelper = require('@util/dbhelper');
 
 module.exports = {
     name: "test",

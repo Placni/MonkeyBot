@@ -1,5 +1,5 @@
-const common = require('../../util/common');
-const dbhelper = require('../../util/dbhelper');
+const common = require('@util/common');
+const dbhelper = require('@util/dbhelper');
 
 module.exports = async (Discord, client, message) => {
     if(!message.guild || message.author.bot) return;

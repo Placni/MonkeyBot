@@ -1,4 +1,4 @@
-const common = require('../util/common');
+const common = require('@util/common');
 const Discord = require('discord.js');
 const math = require(`mathjs`);
 

@@ -1,4 +1,4 @@
-const guildSettings = require('../schema/guildSchema');
+const guildSettings = require('@schema/guildSchema');
 
 module.exports = {
     globalCache: {},

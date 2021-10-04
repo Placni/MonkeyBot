@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+require("module-alias/register");
 require('log-timestamp');
 require('dotenv').config();
 

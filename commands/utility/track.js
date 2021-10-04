@@ -1,6 +1,5 @@
-const guildSettings = require('../schema/guildSchema');
-const dbhelper = require('../util/dbhelper');
-const common = require('../util/common');
+const guildSettings = require('@schema/guildSchema');
+const dbhelper = require('@util/dbhelper');
 const Discord = require('discord.js');
 
 module.exports = {

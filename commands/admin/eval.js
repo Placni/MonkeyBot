@@ -1,6 +1,4 @@
-const common = require('../util/common');
 const Discord = require('discord.js');
-const dbhelper = require('../util/dbhelper');
 
 module.exports = {
     name: "eval",
