@@ -11,9 +11,10 @@ module.exports = {
         let command = args[0];
 
         try {
-            delete require.cache[require.resolve(`./${command}.js`)]
+            let category = client.commands.get(command).category;
+            delete require.cache[require.resolve(`@commands/${category}/${command}.js`)]
             client.commands.delete(command);
-            const pull = require(`./${command}.js`);
+            const pull = require(`@commands/${category}/${command}.js`);
             client.commands.set(command, pull);
             return message.channel.send(`**${command}.js** was reloaded!`);
         } catch (err) {

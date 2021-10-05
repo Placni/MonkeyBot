@@ -14,7 +14,6 @@ module.exports = (client, Discord) => {
             } else {
                 const command = require(path.join('../', dirPath, file));
                 command.category = dirPath.slice(dirPath.lastIndexOf('/') + 1);
-                console.log(command.category);
                 if (command.name) collection.set(command.name, command);
             }
         }
