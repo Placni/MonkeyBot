@@ -8,7 +8,6 @@ module.exports = {
     name: "test",
     description: "a test command!",
     usage: `\`${process.env.PREFIX}test\``,
-    category: "Admin",
     alias: ["test"],
     disabled: false,
     async execute(message, args, client){ 

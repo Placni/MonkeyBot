@@ -5,7 +5,6 @@ module.exports = {
     name: "setdisplayname",
     description: "sets the display name of the bot",
     usage: `\`${process.env.PREFIX}setdisplayname "<name>"\``,
-    category: "Admin",
     alias: ["displayname", "username", "name"],
     disabled: false,
     execute(message, args){

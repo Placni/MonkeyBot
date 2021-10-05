@@ -4,7 +4,6 @@ module.exports = {
     name: "eval",
     description: "remotely run code from command",
     usage: `\`${process.env.PREFIX}eval "<code>"\``,
-    category: "Admin",
     alias: [],
     disabled: false,
     execute(message, args, client){

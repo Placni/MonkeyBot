@@ -5,7 +5,6 @@ module.exports = {
     name: "leaderboard",
     description: "displays your guild leaderboards!",
     usage: `\`${process.env.PREFIX}test\``,
-    category: "GuildSettings",
     alias: ["board", "lb"],
     disabled: false,
     execute(message, args){ 

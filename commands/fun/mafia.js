@@ -5,7 +5,6 @@ module.exports = {
     name: "mafia",
     description: "randomly selects villagers and mafia-men from the vc",
     usage: `\`${process.env.PREFIX}mafia\``,
-    category: "General",
     alias: [],
     disabled: false,
     execute(message, args){ 

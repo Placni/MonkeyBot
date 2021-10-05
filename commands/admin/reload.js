@@ -2,7 +2,6 @@ module.exports = {
     name: "reload",
     description: "reloads command",
     usage: `\`${process.env.PREFIX}reload <comname>\``,
-    category: "Admin",
     alias: ["rl"],
     disabled: false,
     async execute(message, args, client){ 

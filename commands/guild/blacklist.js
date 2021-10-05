@@ -7,7 +7,6 @@ module.exports = {
     name: "blacklist",
     description: "blacklist a user from using the bot in your server",
     usage: `\`${process.env.PREFIX}blacklist <user>\``,
-    category: "GuildSettings",
     alias: ["bl"],
     disabled: false,
     permission: ['ADMINISTRATOR'],

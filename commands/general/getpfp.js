@@ -5,7 +5,6 @@ module.exports = {
     name: "getpfp",
     description: "grabs the avatar of a user",
     usage: `\`${process.env.PREFIX}getpfp <user>\``,
-    category: "General",
     alias: ["pfp", "avatar", "av"],
     disabled: false,
     execute(message, args){ 

@@ -6,7 +6,6 @@ module.exports = {
     name: "track",
     description: "util to track words",
     usage: `\`${process.env.PREFIX}track\``,
-    category: "Admin",
     alias: [],
     disabled: true,
     cache: {},

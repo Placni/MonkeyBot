@@ -4,7 +4,6 @@ module.exports = {
     name: "lmgtfy",
     description: "let me google that for you",
     usage: `\`${process.env.PREFIX}lmgtfy <text>\``,
-    category: "General",
     alias: [],
     disabled: false,
     execute(message, args){ 

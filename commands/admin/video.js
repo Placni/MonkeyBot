@@ -7,9 +7,8 @@ module.exports = {
     name: "video",
     description: "downloads video from a link and sends it back to the channel",
     usage: `\`${process.env.PREFIX}video\``,
-    category: "General",
     alias: ["video", "dl"],
-    disabled: false,
+    disabled: true,
     execute(message, args){ 
 
         if(!args[0]){

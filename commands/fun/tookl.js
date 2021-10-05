@@ -7,7 +7,6 @@ module.exports = {
     name: "tookl",
     description: "for when someone takes a fat L",
     usage: `\`${process.env.PREFIX}tookl <user>\``,
-    category: "General",
     alias: ["tookl"],
     disabled: false,
     async execute(message, args){ 

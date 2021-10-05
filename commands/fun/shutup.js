@@ -8,7 +8,6 @@ module.exports = {
     name: "shutup",
     description: "server mutes the targeted user(s)",
     usage: `\`${process.env.PREFIX}shutup <target> <channel> <time>\``,
-    category: "General",
     alias: ["silence"],
     disabled: false,
     permission: ['MUTE_MEMBERS'],

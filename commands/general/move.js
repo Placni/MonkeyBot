@@ -5,7 +5,6 @@ module.exports = {
     name: "move",
     description: "move all users from one vc to another",
     usage: `\`${process.env.PREFIX}move <vc1> <vc2>\``,
-    category: "General",
     alias: ["mv", "moveall"],
     disabled: false,
     permission: ['MOVE_MEMBERS'],

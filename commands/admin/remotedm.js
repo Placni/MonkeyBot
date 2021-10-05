@@ -5,7 +5,6 @@ module.exports = {
     name: "remotedm",
     description: "dms a user from the bot",
     usage: `\`${process.env.PREFIX}remotedm\``,
-    category: "Admin",
     alias: ["dm"],
     disabled: false,
     execute(message, args){ 
