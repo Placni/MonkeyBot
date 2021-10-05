@@ -15,6 +15,7 @@ module.exports = {
             delete require.cache[require.resolve(`@commands/${category}/${command}.js`)]
             client.commands.delete(command);
             const pull = require(`@commands/${category}/${command}.js`);
+            pull.category = category;
             client.commands.set(command, pull);
             return message.channel.send(`**${command}.js** was reloaded!`);
         } catch (err) {
