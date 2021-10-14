@@ -1,4 +1,9 @@
+const common = require('@util/common');
 const Discord = require('discord.js');
+const math = require('mathjs');
+const guildSettings = require('@schema/guildSchema');
+const dbhelper = require('@util/dbhelper');
+const fs = require('fs');
 
 module.exports = {
     name: "eval",
@@ -23,9 +28,9 @@ module.exports = {
 
         function clean(text) {
             if (typeof(text) === "string")
-              return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
+            return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
             else
-                return text;
+            return text;
         }
     }   
 }
