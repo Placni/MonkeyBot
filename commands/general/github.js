@@ -13,7 +13,7 @@ module.exports = {
             .setThumbnail('https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png')
             .setTitle('Check me out on github!')
             .setURL('https://github.com/Placni/MonkeyBot/tree/main')
-            .setFooter('Made with <3 by Myssto#0001')
+            .setDescription('Made with <3 by Myssto#0001')
         
         message.channel.send(gitInfo);
     }
