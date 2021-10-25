@@ -16,6 +16,13 @@ module.exports = {
         if(!possibleBoards.includes(args[0]) && args[0] !== 'L') return message.reply(` you are not tracking that! \n Use \`${guildinfo.prefix}trackword\` to see what you are tracking`);
         let desiredBoard = args[0];
 
+        console.log(`desired board: ${desiredBoard}`)
+        for (const [userid, obj] of Object.entries(guildinfo.userinfo)){
+            if(!userid == 'placeholder') console.log(`userid: ${userid} \n ${desiredBoard}: ${obj.trackers[desiredBoard]}`);
+        }
+
+
+        /*
         let vals = [];
         let tracked = {};
         for (const [userid, obj] of Object.entries(guildinfo.userinfo)){
@@ -50,5 +57,6 @@ module.exports = {
             )
             .setFooter(`Requested by ${message.author.tag}`)
         message.channel.send(leaderEmbed);
+        */
     }
 }

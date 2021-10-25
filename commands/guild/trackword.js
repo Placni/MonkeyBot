@@ -6,7 +6,7 @@ module.exports = {
     name: "trackword",
     description: "add or delete a word to track in your server",
     usage: `\`${process.env.PREFIX}trackword <add/delete/clear> <word>\``,
-    alias: ["trackword"],
+    alias: [],
     disabled: false,
     permission: ['MANAGE_MESSAGES'],
     async execute(message, args){ 

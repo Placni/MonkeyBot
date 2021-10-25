@@ -7,12 +7,7 @@ module.exports = {
         if(!this.globalCache[guildID]){
             let settings = await guildSettings.findOne({ _id: guildID });
             if(!settings){
-                settings = await guildSettings.create({
-                    _id: guildID,
-                    prefix: '-',
-                    trackedwords: [],
-                    userinfo: {placeholder: 'placeholder'},
-                })
+                settings = await guildSettings.create({ _id: guildID });
                 settings.save();
             }
             this.globalCache[guildID] = settings;
@@ -24,9 +19,7 @@ module.exports = {
         let userdata;
         if(!this.globalCache[message.guild.id].userinfo[target]){
             let trackers = {};
-            words.forEach(element => {
-                trackers[element] = 0;
-            });
+            words.forEach(element => { trackers[element] = 0; });
             this.globalCache[message.guild.id].userinfo[target] = {trackers: trackers}
             await guildSettings.findOneAndUpdate(
                 {
