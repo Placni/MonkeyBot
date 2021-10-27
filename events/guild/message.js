@@ -8,7 +8,7 @@ module.exports = async (Discord, client, message) => {
         let words = await client.commands.get('trackword').wordCheck(message);
         if (words.length > 0){
             if (new RegExp(words.join("|")).test(message.content)) {
-                client.commands.get('track').execute(message, client, words);
+                client.features.get('track').execute(message, client, words);
             }
         }
         return;

@@ -1,10 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const { Collection } = require('discord.js');
 
 module.exports = (client, Discord) => {
-    client.commands = new Collection();
-
     const loadFiles = (dirPath, collection) => {
         const files = fs.readdirSync(dirPath);
 
@@ -19,5 +16,6 @@ module.exports = (client, Discord) => {
         }
     }
     loadFiles(`./commands`, client.commands);
+    loadFiles(`./feature`, client.features);
 }
 
