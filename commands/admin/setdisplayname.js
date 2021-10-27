@@ -7,18 +7,12 @@ module.exports = {
     usage: `\`${process.env.PREFIX}setdisplayname "<name>"\``,
     alias: ["displayname", "username", "name"],
     disabled: false,
-    execute(message, args){
-        if (message.author.id !== process.env.OWNERID){
-            message.reply(" you must be the owner to call this!");
-            return;
-        }
-
-        let client = message.client;
+    execute(message, args, client){
+        if (message.author.id !== process.env.OWNERID) return message.reply(" you must be the owner to call this!");
+        
         let newName = args.join(" ");
-
         client.user
             .setUsername(newName)
-            .then(common.logsuccess(message, this.name, `newName: ${newName}`))
             .catch(error => {
                 message.reply(error.message);
             });
