@@ -5,7 +5,7 @@ const guildSchema = new mongoose.Schema({
     prefix: {type: String, default: process.env.PREFIX},
     trackedwords: {type: Array, defualt: []},
     blacklist: {type: Array, default: []},
-    userinfo: {type: Object, default: {}}
+    userinfo: {type: Object, default: {ph: 'ph'}}
 }, {_id: false});
 
 module.exports = mongoose.model("guildSettings", guildSchema);

@@ -8,6 +8,7 @@ module.exports = {
             let settings = await guildSettings.findOne({ _id: guildID });
             if(!settings){
                 settings = await guildSettings.create({ _id: guildID });
+                settings.userinfo = {};
                 settings.save();
             }
             this.globalCache[guildID] = settings;

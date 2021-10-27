@@ -5,6 +5,7 @@ module.exports = {
     name: "leaderboard",
     description: "displays your guild leaderboards!",
     usage: `\`${process.env.PREFIX}test\``,
+    category: "GuildSettings",
     alias: ["board", "lb"],
     disabled: false,
     execute(message, args){ 
@@ -13,23 +14,14 @@ module.exports = {
         let possibleBoards = guildinfo.trackedwords;
 
         if(!args.length) return message.reply(' specify a leaderboard to view!');
-        if(!possibleBoards.includes(args[0]) && args[0] !== 'L') return message.reply(` you are not tracking that! \n Use \`${guildinfo.prefix}trackword\` to see what you are tracking`);
+        if(!possibleBoards.includes(args[0])) return message.reply(` you are not tracking that! \n Use \`${guildinfo.prefix}trackword\` to see what you are tracking`);
         let desiredBoard = args[0];
 
-        console.log(`desired board: ${desiredBoard}`)
-        for (const [userid, obj] of Object.entries(guildinfo.userinfo)){
-            if(!userid == 'placeholder') console.log(`userid: ${userid} \n ${desiredBoard}: ${obj.trackers[desiredBoard]}`);
-        }
-
-
-        /*
         let vals = [];
         let tracked = {};
         for (const [userid, obj] of Object.entries(guildinfo.userinfo)){
-            if(userid !== 'placeholder' || !obj) {
-                tracked[`<@${userid}>`] = obj.trackers[desiredBoard];
-                vals.push(obj.trackers[desiredBoard]);
-            }
+            tracked[`<@${userid}>`] = obj.trackers[desiredBoard];
+            vals.push(obj.trackers[desiredBoard]);  
         }
 
         let str = "";
@@ -57,6 +49,5 @@ module.exports = {
             )
             .setFooter(`Requested by ${message.author.tag}`)
         message.channel.send(leaderEmbed);
-        */
     }
 }
