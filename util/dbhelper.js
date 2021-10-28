@@ -17,6 +17,7 @@ module.exports = {
 
     async getGuildUserProfile(guildID, userID) {
         let userdata;
+        if(!this.globalCache[guildID]) await this.getGuildSettings(guildID);
         if(!this.globalCache[guildID].userinfo[userID]){
             this.globalCache[guildID].userinfo[userID] = {};
             let path = `userinfo.${userID}`;
