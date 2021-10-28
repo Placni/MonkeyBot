@@ -5,11 +5,10 @@ module.exports = {
     name: "leaderboard",
     description: "displays your guild leaderboards!",
     usage: `\`${process.env.PREFIX}test\``,
-    category: "GuildSettings",
     alias: ["board", "lb"],
     disabled: false,
     execute(message, args){ 
-        if(!dbhelper.globalCache[message.guild.id]) dbhelper.getGuildSettings;
+        if(!dbhelper.globalCache[message.guild.id]) dbhelper.getGuildSettings(message);
         let guildinfo = dbhelper.globalCache[message.guild.id];
         let possibleBoards = guildinfo.trackedwords;
 

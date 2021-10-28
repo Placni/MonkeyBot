@@ -10,7 +10,6 @@ module.exports = {
     disabled: false,
     permission: ['MANAGE_MESSAGES'],
     async execute(message, args){ 
-        
         let words;
         switch (args[0]){
             case "add":
@@ -61,14 +60,7 @@ module.exports = {
 
         async function updateWords(words){
             dbhelper.globalCache[message.guild.id].trackedwords = words;
-            await guildSettings.findOneAndUpdate(
-                {
-                    _id: message.guild.id
-                },
-                {
-                    trackedwords: words
-                },
-            )
+            await guildSettings.findOneAndUpdate({ _id: message.guild.id }, { trackedwords: words });
         }
     },
 

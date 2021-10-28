@@ -12,6 +12,6 @@ module.exports = {
     disabled: false,
     async execute(message, args, client){ 
         if(message.author.id !== process.env.OWNERID) return message.reply(' you must be the owner to use this!');
-
+            
     }
 }

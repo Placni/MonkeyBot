@@ -10,7 +10,7 @@ module.exports = async (Discord, client, message) => {
             if (new RegExp(words.join("|")).test(message.content)) {
                 client.features.get('track').execute(message, client, words);
             }
-        }
+        } else return;
         return;
     }
     let blacklist = dbhelper.globalCache[message.guild.id].blacklist;

@@ -16,6 +16,6 @@ module.exports = (client, Discord) => {
         }
     }
     loadFiles(`./commands`, client.commands);
-    loadFiles(`./feature`, client.features);
+    loadFiles(`./features`, client.features);
 }
 
