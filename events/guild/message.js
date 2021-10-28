@@ -3,9 +3,9 @@ const dbhelper = require('@util/dbhelper');
 
 module.exports = async (Discord, client, message) => {
     if(!message.guild || message.author.bot) return;
-    let prefix = await client.commands.get('prefix').prefixCheck(message);
+    let prefix = await client.commands.get('prefix').prefixCheck(message.guild.id);
     if(!message.content.startsWith(prefix)) {
-        let words = await client.commands.get('trackword').wordCheck(message);
+        let words = await client.commands.get('trackword').wordCheck(message.guild.id);
         if (words.length > 0){
             if (new RegExp(words.join("|")).test(message.content)) {
                 client.features.get('track').execute(message, client, words);

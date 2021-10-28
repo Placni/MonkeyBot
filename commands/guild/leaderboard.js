@@ -8,7 +8,7 @@ module.exports = {
     alias: ["board", "lb"],
     disabled: false,
     execute(message, args){ 
-        if(!dbhelper.globalCache[message.guild.id]) dbhelper.getGuildSettings(message);
+        if(!dbhelper.globalCache[message.guild.id]) dbhelper.getGuildSettings(message.guild.id);
         let guildinfo = dbhelper.globalCache[message.guild.id];
         let possibleBoards = guildinfo.trackedwords;
 

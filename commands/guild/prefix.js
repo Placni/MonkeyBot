@@ -30,13 +30,13 @@ module.exports = {
         dbhelper.globalCache[message.guild.id].prefix = newPrefix;
     },
 
-    async prefixCheck(message){
+    async prefixCheck(guildID){
         let prefix;
-        if (!dbhelper.globalCache[message.guild.id]){
-            await dbhelper.getGuildSettings(message);
-            return prefix = dbhelper.globalCache[message.guild.id].prefix;
+        if (!dbhelper.globalCache[guildID]){
+            await dbhelper.getGuildSettings(guildID);
+            return prefix = dbhelper.globalCache[guildID].prefix;
         } else {
-            return prefix = dbhelper.globalCache[message.guild.id].prefix;
+            return prefix = dbhelper.globalCache[guildID].prefix;
         }
     }
 }

@@ -2,8 +2,7 @@ const guildSettings = require('@schema/guildSchema');
 
 module.exports = {
     globalCache: {},
-    async getGuildSettings(message) {
-        let guildID = (!message.guild.id) ? message : message.guild.id;
+    async getGuildSettings(guildID) {
         if(!this.globalCache[guildID]){
             let settings = await guildSettings.findOne({_id: guildID});
             if(!settings){
@@ -16,14 +15,13 @@ module.exports = {
         } else return this.globalCache[guildID];
     },
 
-    async getGuildUserProfile(message, words, target) {
+    async getGuildUserProfile(guildID, userID) {
         let userdata;
-        let guildID = (!message.guild.id) ? message : message.guild.id;
-        if(!this.globalCache[guildID].userinfo[target]){
-            this.globalCache[guildID].userinfo[target] = {};
-            let path = `userinfo.${target}`;
+        if(!this.globalCache[guildID].userinfo[userID]){
+            this.globalCache[guildID].userinfo[userID] = {};
+            let path = `userinfo.${userID}`;
             await guildSettings.findOneAndUpdate({_id: guildID}, { [path]: {}});
-            return userdata = this.globalCache[guildID].userinfo[target];
-        } else return userdata = this.globalCache[guildID].userinfo[target];
+            return userdata = this.globalCache[guildID].userinfo[userID];
+        } else return userdata = this.globalCache[guildID].userinfo[userID];
     }
 }

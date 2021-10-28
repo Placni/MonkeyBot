@@ -13,7 +13,7 @@ module.exports = {
     async execute(message, args){ 
         if(message.author.id !== message.guild.ownerID) return message.reply(' you must be the server owner to use this!');
         if(!args.length){
-            await dbhelper.getGuildSettings(message);
+            await dbhelper.getGuildSettings(message.guild.id);
             let blacklist = dbhelper.globalCache[message.guild.id].blacklist
             if(!blacklist.length) return message.reply(' no one is blacklisted in this server!');
             return message.channel.send(blEmbed(blacklist));
@@ -21,7 +21,7 @@ module.exports = {
         let target = common.GetUserID(args[0], message);
         if(!target) return message.reply(' couldnt find desired user!');
 
-        if(!dbhelper.globalCache[message.guild.id]) await dbhelper.getGuildSettings(message);
+        if(!dbhelper.globalCache[message.guild.id]) await dbhelper.getGuildSettings(message.guild.id);
         if(!dbhelper.globalCache[message.guild.id].blacklist){
             dbhelper.globalCache[message.guild.id].blacklist = [target];
             await UpdateDB([target]);
@@ -53,14 +53,7 @@ module.exports = {
             return blEmbed;
         }
         async function UpdateDB(list){
-            await guildSettings.findOneAndUpdate(
-                {
-                    _id: message.guild.id
-                },
-                {
-                    blacklist: list
-                },
-            );
+            await guildSettings.findOneAndUpdate({ _id: message.guild.id }, { blacklist: list });
         }
     }
 }

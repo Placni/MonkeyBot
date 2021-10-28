@@ -8,7 +8,7 @@ module.exports = {
     usage: `\`${process.env.PREFIX}track\``,
     alias: [],
     async execute(message, client, words){ 
-        let userdata = await dbhelper.getGuildUserProfile(message, words, message.author.id);
+        let userdata = await dbhelper.getGuildUserProfile(message.guild.id, message.author.id);
         if(!userdata.trackers) userdata.trackers = {};
         let trackers = userdata.trackers;
         words.forEach(element => {
