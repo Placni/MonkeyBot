@@ -24,5 +24,10 @@ module.exports = {
             await guildSettings.findOneAndUpdate({_id: guildID}, { [path]: {}});
             return userdata = this.globalCache[guildID].userinfo[userID];
         } else return userdata = this.globalCache[guildID].userinfo[userID];
+    },
+
+    async updateUserProfile(guildID, path, data) {
+        let newdat = await guildSettings.findOneAndUpdate({ _id: guildID }, { [path]: data }, {new: true})
+        this.globalCache[guildID] = newdat;
     }
 }

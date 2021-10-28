@@ -18,8 +18,6 @@ module.exports = {
                 trackers[element] = occurences;
             } else trackers[element] += occurences;
         });
-        dbhelper.globalCache[message.guild.id].userinfo[message.author.id].trackers = trackers;
-        let path = `userinfo.${message.author.id}.trackers`;
-        await guildSettings.findOneAndUpdate({ _id: message.guild.id }, { [path]: trackers });
+        await dbhelper.updateUserProfile(message.guild.id, `userinfo.${message.author.id}.trackers`, trackers);
     },
 }
