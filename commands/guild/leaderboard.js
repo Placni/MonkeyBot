@@ -19,6 +19,8 @@ module.exports = {
         let vals = [];
         let tracked = {};
         for (const [userid, obj] of Object.entries(guildinfo.userinfo)){
+            if(!obj.hasOwnProperty('trackers')) continue;
+            if(!obj.trackers.hasOwnProperty(desiredBoard)) continue;
             tracked[`<@${userid}>`] = obj.trackers[desiredBoard];
             vals.push(obj.trackers[desiredBoard]);  
         }
