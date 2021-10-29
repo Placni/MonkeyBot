@@ -13,6 +13,7 @@
     "log-timestamp": "^0.3.0",
     "mathjs": "^9.2.0",
     "module-alias": "^2.2.2",
+    "moment": "^2.29.1",
     "mongoose": "^5.12.7",
     "package.json": "^2.0.1",
     "path": "^0.12.7",
@@ -26,6 +27,7 @@
     "@root": ".",
     "@util": "./util",
     "@schema": "./schema",
-    "@commands": "./commands"
+    "@commands": "./commands",
+    "@features": "./features"
   }
 }

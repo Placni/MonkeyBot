@@ -5,7 +5,8 @@
             "@root/*": ["*"],
             "@util/*": ["util/*"],
             "@schema/*": ["schema/*"],
-            "@commands": ["./commands/*"]
+            "@commands": ["./commands/*"],
+            "@features": ["./features/*"]
         }
     }
 }

@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const math = require('mathjs');
 const guildSettings = require('@schema/guildSchema');
 const dbhelper = require('@util/dbhelper');
+const moment = require('moment');
 
 module.exports = {
     name: "test2",
@@ -13,6 +14,8 @@ module.exports = {
     async execute(message, args, client){ 
         if(message.author.id !== process.env.OWNERID) return message.reply(' you must be the owner to use this!');
 
-        console.log(dbhelper.globalCache[message.guild.id].userinfo);
+        let timestamp = message.guild.createdAt;
+        console.log(moment(timestamp).format("MM/d/YYYY, h:mm:ss a"));
+        
     }
 }
