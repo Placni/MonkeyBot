@@ -3,7 +3,17 @@ require("module-alias/register");
 require('log-timestamp');
 require('dotenv').config();
 
-const client = new Discord.Client();
+const client = new Discord.Client({
+    intents: [
+        "GUILDS",
+        "GUILD_MEMBERS",
+        "GUILD_EMOJIS_AND_STICKERS",
+        "GUILD_VOICE_STATES",
+        "GUILD_MESSAGES",
+        "GUILD_MESSAGE_REACTIONS",
+    ],
+    failIfNotExists: false,
+});
 
 client.commands = new Discord.Collection();
 client.events = new Discord.Collection();
