@@ -18,7 +18,7 @@ module.exports = {
         } else guildMember = message.member;
         let userdata = await dbhelper.getGuildUserProfile(message.guild.id, guildMember.id);
 
-        let nicknames = !userdata.nicknames ? ["No Usernames Logged"] : userdata.nicknames;
+        let nicknames = !userdata.nicknames ? ["No Nicknames Logged"] : userdata.nicknames;
         let vcTime = !userdata.vcTime ? 'None' : userdata.vcTime;
         if (vcTime !== 'None'){
             let hrs = Math.floor((vcTime / 60) / 60);
