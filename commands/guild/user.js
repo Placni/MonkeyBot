@@ -1,5 +1,5 @@
 const dbhelper = require('@util/dbhelper');
-const common = require('@util/common');
+const { findMember } = require('@util/common');
 const Discord = require('discord.js');
 const moment = require('moment');
 
@@ -13,7 +13,7 @@ module.exports = {
     async execute(message, args, client){ 
         let guildMember;
         if(args[0]){
-            guildMember = common.GetUserID(args[0], message);
+            guildMember = await findMember(args[0], message);
             if(!guildMember) return message.channel.send(`Couldn't find desired user!`); 
         } else guildMember = message.member;
         let userdata = await dbhelper.getGuildUserProfile(message.guild.id, guildMember.id);
@@ -38,6 +38,6 @@ module.exports = {
             .setDescription(`<@${guildMember.id}> (${guildMember.user.tag})`)
             .setThumbnail(guildMember.user.displayAvatarURL({ format: "png", dynamic: true, size: 2048 }))
         
-        message.channel.send(embed);
+        message.channel.send({embeds: [embed]});
     }
 }

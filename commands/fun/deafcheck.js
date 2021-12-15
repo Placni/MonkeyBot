@@ -11,12 +11,12 @@ module.exports = {
     execute(message, args){ 
         if(!args[0]) return message.reply(" specify a channel you monkey");
 
-        let targetChannel = common.GetVcID(args.shift(), message);
+        let targetChannel = common.findVC(args.shift(), message);
         if(!targetChannel) return message.reply(" couldn't find target channel!");
         if(targetChannel.members.size == 0) return message.reply(" the target channel must have users in it!");
 
         let i = 0
-        let channel = common.GetVcID('afk', message);
+        let channel = common.findVC('afk', message);
         if(!channel) channel = null;
         for(let [snowflake, guildMember] of targetChannel.members){
             if(guildMember.voice.selfDeaf){

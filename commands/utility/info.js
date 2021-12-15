@@ -17,7 +17,7 @@ module.exports = {
 
         message.channel.send('Resolving').then(msg => {
             msg.delete();
-            message.channel.send(createEmbed(msg.createdTimestamp - message.createdTimestamp));
+            message.channel.send({embeds: [createEmbed(msg.createdTimestamp - message.createdTimestamp)]});
         })
 
         function createEmbed(ping){

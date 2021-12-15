@@ -6,7 +6,7 @@ module.exports = {
     description: "displays a list of currently usable commands",
     usage: `\`${process.env.PREFIX}help\``,
     alias: ["commands", "h"],
-    disabled: false,
+    disabled: true,
     async execute(message, args){
         let client = message.client;
         let comlist = {Utility: [], General: [], Admin: [], GuildSettings: []};

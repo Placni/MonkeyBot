@@ -15,6 +15,6 @@ module.exports = {
             .setURL('https://github.com/Placni/MonkeyBot/tree/main')
             .setDescription('Made with <3 by Myssto#0001')
         
-        message.channel.send(gitInfo);
+        message.channel.send({embeds: [gitInfo]});
     }
 }

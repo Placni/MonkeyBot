@@ -1,19 +1,36 @@
 const colors = require('colors');
 
-function GetUserID(input, message){
-    let newInput = input.toString().toLowerCase();
-    let user = message.guild.members.cache.get(input);
-
-    if (!user) user = message.guild.members.cache.filter(u => u.displayName.toLowerCase().includes(newInput)).first();
-    if (!user) user = message.guild.members.cache.filter(u => u.user.username.toLowerCase().includes(newInput)).first();
-    if (!user) if (message.mentions.users.size) user = message.guild.members.cache.get(message.mentions.users.first().id);
-    return user;
+async function findMember(input, message){
+    if(!input) return;
+    const members = await message.guild.members.search({query: input, limit: 1});
+    let member = members?.first();
+    if(!member){
+        const filter = input.match(/^<@!?(\d+)>$/);
+        if(!filter) return;
+        member = message.guild.members.cache.get(filter[1]);
+    }
+    return member;
 }
 
-function GetVcID(input, message){
-    let vc = message.guild.channels.cache.get(input);
+function findChannel(input, message){
+    if(!input) return;
+    const filter = input?.match(/^<#(\d+)>$/);
+    if (filter) return message.guild.channels.cache.get(filter[1]);
+}
 
-    if (vc == null) vc = message.guild.channels.cache.filter(channel => channel.name.toLowerCase().includes(input) && channel.type === "voice").first();
+function findVC(input, message){
+    if(!input) return;
+    input = input.toLowerCase();
+    let vc = message.guild.channels.cache.get(input);
+    if(!vc){
+        const filter = input.match(/^<#(\d+)>$/);
+        if (filter) vc = message.guild.channels.cache.get(filter[1]);
+    }
+    if(!vc){
+        vc = message.guild.channels.cache
+            .filter(c => c.name.toLowerCase().includes(input) && c.type === "GUILD_VOICE")
+            .first();
+    }
     return vc;
 }
 
@@ -22,13 +39,14 @@ function ArgsToString(args){
     return String(newArgs);
 }
 
-function PermissionCheck(target, permission){
-    return (hasPermission = permission => target.hasPermission(permission));
+function PermissionCheck(message, permission){
+    return message.member.permissionsIn(message.channel).toArray();
 }
 
 module.exports = {
-    GetUserID,
-    GetVcID,
+    findMember,
+    findVC,
+    findChannel,
     ArgsToString,
     PermissionCheck
     }

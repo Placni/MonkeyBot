@@ -16,33 +16,33 @@ module.exports = {
             case "add":
                 args.shift();
                 words = await this.wordCheck(guildID)
-                if(args.some(item => words.includes(item))) return message.reply(` you are already tracking that word!`);
+                if(args.some(item => words.includes(item))) return message.reply(`You are already tracking that word!`);
                 words = words.concat(args);
                 await updateWords(words);
-                return message.reply(wordsEmbed(dbhelper.globalCache[guildID].trackedwords));
+                return message.reply({embeds: [wordsEmbed(dbhelper.globalCache[guildID].trackedwords)]});
             break;
             case "del":
             case "delete":
                 args.shift();
                 words = await this.wordCheck(guildID);
-                if(!args.some(item => words.includes(item))) return message.reply(` you aren't tracking that word!`);
+                if(!args.some(item => words.includes(item))) return message.reply(`You aren't tracking that word!`);
                 args.forEach(element => {
                     words = words.filter(e => e !== element);
                 });
                 await updateWords(words);
                 if(!dbhelper.globalCache[guildID].trackedwords.length){
-                    return message.reply(` your server is currently not tracking any words!`);
-                } else return message.reply(wordsEmbed(dbhelper.globalCache[guildID].trackedwords));
+                    return message.reply(`Your server is currently not tracking any words!`);
+                } else return message.reply({embeds: [wordsEmbed(dbhelper.globalCache[guildID].trackedwords)]});
             break;
             case "clear":
                 words = [];
                 await updateWords(words);
-                return message.reply(` your server is no longer tracking any words!`);
+                return message.reply(`Your server is no longer tracking any words!`);
             break;
             default:
                 await this.wordCheck(guildID).then(words => {
                     if(!words.length){
-                        return message.reply(` your server is not tracking any words!`);
+                        return message.reply(`Your server is not tracking any words!`);
                     } else return message.reply(wordsEmbed(dbhelper.globalCache[guildID].trackedwords));
                 })
                 return;

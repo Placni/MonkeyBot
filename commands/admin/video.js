@@ -1,6 +1,6 @@
 const common = require('@util/common');
 const Discord = require('discord.js');
-const youtubedl = require('youtube-dl');
+const youtubedl = require('youtube-dl-exec');
 const fs = require('fs');
 
 module.exports = {

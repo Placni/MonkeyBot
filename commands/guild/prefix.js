@@ -18,15 +18,8 @@ module.exports = {
         }
         let newPrefix = args.join("");
         if (newPrefix == "reset") newPrefix = process.env.PREFIX;
-        await guildSettings.findOneAndUpdate(
-            {
-                _id: message.guild.id
-            },
-            {
-                prefix: newPrefix,
-            },
-        );
-        message.reply(` changed prefix to \`${newPrefix}\``);
+        await guildSettings.findOneAndUpdate({ _id: message.guild.id }, { prefix: newPrefix });
+        message.reply(`Changed server prefix to \`${newPrefix}\``);
         dbhelper.globalCache[message.guild.id].prefix = newPrefix;
     },
 

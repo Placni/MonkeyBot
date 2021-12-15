@@ -1,6 +1,5 @@
 const common = require('@util/common');
 const Discord = require('discord.js');
-const math = require(`mathjs`);
 
 //THIS COMMAND WILL RATE LIMIT THE BOT IF USED IN A CHANNEL WITH OVER 5 PEOPLE
 
@@ -11,33 +10,32 @@ module.exports = {
     alias: ["silence"],
     disabled: false,
     permission: ['MUTE_MEMBERS'],
-    execute(message, args){ 
+    async execute(message, args){ 
         let targetChannel;
         let target = args.shift();
-        let time;
 
-        if (!target) return message.reply(" specify a person you monkey");
+        if (!target) return message.reply("Specify a person you monkey");
         if (target == 'all'){
             targetChannel = args.shift();
-            targetChannel = common.GetVcID(targetChannel, message);
-            if(!targetChannel) return message.reply(" couldn't find desired channel!"); 
+            targetChannel = common.findVC(targetChannel, message);
+            if(!targetChannel) return message.reply("Couldn't find desired channel!"); 
             target = 'all'
         } else {
-            target = common.GetUserID(target, message);
-            if (!target) return message.reply(" couldn't find desired user!");               
+            target = await common.findMember(target, message);
+            if (!target) return message.reply("Couldn't find desired user!");               
         }
 
-        time = Number(time);
-        if (!time || !math.isNumeric(time) || time > 10){
+        let time = parseInt(args.shift());
+        if (!time || time > 10){
             time = 5000;
         } else {
-            time = math.ceil(time);
+            time = Math.ceil(time);
             time = (time * 1000);
         }
 
         function ToggleMute(target){
             if (!target.voice.channel){
-                message.reply(" that user isn't in vc you monkey");
+                message.reply("That user isn't in vc you monkey");
                 return false;
             }
             if (!target.voice.serverMute){

@@ -9,12 +9,13 @@ module.exports = {
     disabled: false,
     permission: ['MANAGE_MESSAGES'],
     async execute(message, args){ 
-        if(!args[0]) return message.reply(" please specify an amount!");
-        if(isNaN(args[0]) || (args[0] < 1)) return message.reply(" please enter a valid number!");
-        if(args[0] > 100) return message.reply(" I can only clear 100 messages at a time!");
+        let count = args[0];
+        if(!count) return message.reply(" please specify an amount!");
+        if(isNaN(count) || (count < 1)) return message.reply("Enter a valid number!");
+        count = Math.ceil(count) > 100 ? 100 : Math.ceil(count);
 
-        await message.channel.messages.fetch({limit: args[0]}).then(messages =>{
-            message.channel.bulkDelete(messages).then(message.reply(` purged **${args[0]}** messages!`)).then(common.logsuccess(message, this.name, `purged ${args[0]} message(s)`));
+        await message.channel.messages.fetch({limit: count}).then(messages =>{
+            message.channel.bulkDelete(messages).then(message.channel.send(`Purged **${count}** messages!`))
         });
     }
 }

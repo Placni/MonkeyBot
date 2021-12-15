@@ -1,4 +1,4 @@
-const common = require('@util/common');
+const { findMember } = require('@util/common');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -7,14 +7,14 @@ module.exports = {
     usage: `\`${process.env.PREFIX}remotedm\``,
     alias: ["dm"],
     disabled: false,
-    execute(message, args){ 
+    async execute(message, args){ 
         if (message.author.id !== process.env.OWNERID) return message.reply(" you must be the owner to use this!");
 
         if(!args) return message.reply(" specify a target!");
-        let target = common.GetUserID(args.shift(), message);
+        let target = await findMember(args.shift(), message);
         if(!target) return message.reply(" couldn't find target!");
 
         let str = args.join(' ');
-        target.send(str);
+        target.user.send({content: str});
     }
 }

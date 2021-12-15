@@ -1,4 +1,4 @@
-const common = require('@util/common');
+const { findMember } = require('@util/common');
 const Discord = require('discord.js');
 const guildSettings = require('@schema/guildSchema');
 const dbhelper = require('@util/dbhelper');
@@ -11,31 +11,33 @@ module.exports = {
     disabled: false,
     permission: ['ADMINISTRATOR'],
     async execute(message, args){ 
-        if(message.author.id !== message.guild.ownerID) return message.reply(' you must be the server owner to use this!');
-        if(!args.length){
-            await dbhelper.getGuildSettings(message.guild.id);
-            let blacklist = dbhelper.globalCache[message.guild.id].blacklist
-            if(!blacklist.length) return message.reply(' no one is blacklisted in this server!');
-            return message.channel.send(blEmbed(blacklist));
-        }
-        let target = common.GetUserID(args[0], message);
-        if(!target) return message.reply(' couldnt find desired user!');
+        if(message.author.id !== message.guild.ownerId) return message.reply('You must be the server owner to use this!');
 
-        if(!dbhelper.globalCache[message.guild.id]) await dbhelper.getGuildSettings(message.guild.id);
-        if(!dbhelper.globalCache[message.guild.id].blacklist){
-            dbhelper.globalCache[message.guild.id].blacklist = [target];
+        let guildID = message.guildId;
+        if(!args.length){
+            await dbhelper.getGuildSettings(guildID);
+            let blacklist = dbhelper.globalCache[guildID].blacklist
+            if(!blacklist.length) return message.reply('No one is blacklisted in this server!');
+            return message.channel.send({embeds: [blEmbed(blacklist)]});
+        }
+        let target = await findMember(args[0], message);
+        if(!target) return message.reply('Couldnt find desired user!');
+
+        if(!dbhelper.globalCache[guildID]) await dbhelper.getGuildSettings(guildID);
+        if(!dbhelper.globalCache[guildID].blacklist){
+            dbhelper.globalCache[guildID].blacklist = [target];
             await UpdateDB([target]);
             return message.channel.send(`<@${target.user.id}> has been added to the blacklist`);
         }
-        let blacklist = dbhelper.globalCache[message.guild.id].blacklist
+        let blacklist = dbhelper.globalCache[guildID].blacklist
         if(blacklist.includes(target.user.id)){
             let newlist = blacklist.filter(e => e !== target.user.id);
-            dbhelper.globalCache[message.guild.id].blacklist = newlist;
+            dbhelper.globalCache[guildID].blacklist = newlist;
             await UpdateDB(newlist);
             return message.channel.send(`<@${target.user.id}> has been removed from the blacklist`);
         } else {
             blacklist.push(target.user.id);
-            dbhelper.globalCache[message.guild.id].blacklist = blacklist;
+            dbhelper.globalCache[guildID].blacklist = blacklist;
             await UpdateDB(blacklist);
             return message.channel.send(`<@${target.user.id}> has been added to the blacklist`);
         }
@@ -45,7 +47,7 @@ module.exports = {
             list.forEach(e => {
                 users.push(`<@${e}>`);
             });
-            users.join(`\n`);
+            users = users.join(`\n`);
             const blEmbed = new Discord.MessageEmbed()
             .setColor('#803d8f')
             .setAuthor(message.guild.name, message.guild.iconURL({ format: "png", dynamic: true, size: 2048 }))
@@ -53,7 +55,7 @@ module.exports = {
             return blEmbed;
         }
         async function UpdateDB(list){
-            await guildSettings.findOneAndUpdate({ _id: message.guild.id }, { blacklist: list });
+            await guildSettings.findOneAndUpdate({ _id: guildID }, { blacklist: list });
         }
     }
 }

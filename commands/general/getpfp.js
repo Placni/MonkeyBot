@@ -7,7 +7,7 @@ module.exports = {
     usage: `\`${process.env.PREFIX}getpfp <user>\``,
     alias: ["pfp", "avatar", "av"],
     disabled: false,
-    execute(message, args){ 
+    async execute(message, args){ 
         let format = { format: "png", dynamic: true, size: 2048 };
         let argString = common.ArgsToString(args);
         let target;
@@ -15,12 +15,8 @@ module.exports = {
         if (!argString){
             target = message.member;
         } else {
-            target = common.GetUserID(argString, message);
-            if (!target){
-                message.reply(" couldn't find desired user!");
-                common.logerror(message, this.name, "couldn't find desired user");
-                return;
-            }
+            target = await common.findMember(argString, message);
+            if (!target) return message.reply("Couldn't find desired user!");
         }
 
         const pfpEmbed = new Discord.MessageEmbed()
@@ -30,7 +26,6 @@ module.exports = {
         .setFooter(`Called by ${message.author.tag}`)
         .setTimestamp()
 
-        message.channel.send(pfpEmbed);
-        common.logsuccess(message, this.name, "");
+        message.channel.send({embeds: [pfpEmbed]});
     }
 }

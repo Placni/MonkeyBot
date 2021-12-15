@@ -24,13 +24,13 @@ module.exports = async (Discord, client, message) => {
             if (c[1].disabled == true) {
                 return message.reply(" that command is disabled");
             } else {
-                if (c[1].permission == undefined || c[1].permission.some(common.PermissionCheck(message.member, c[1].permission))) {
+                if (c[1].permission == undefined || c[1].permission.some(e => message.member.permissionsIn(message.channel).toArray().includes(e))) {
                     try {
                         client.commands.get(c[0]).execute(message, args, client); 
                     } catch (err) {
                         return console.log(err);
                     }   
-                } else return message.reply(` missing permission: \`${c[1].permission.join(", ")}\``);
+                } else return message.reply(`Missing Permission(s): \`${c[1].permission.join(", ")}\``);
             }
         }
     }

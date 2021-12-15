@@ -12,6 +12,6 @@ module.exports = {
             .setColor('#803d8f')
             .setTitle('For the idiot')
             .setURL(`https://letmegooglethat.com/?q=${args.join('+')}`)
-        message.channel.send(toSend);
+        message.channel.send({embeds: [toSend]});
     }
 }

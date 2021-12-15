@@ -26,7 +26,7 @@ module.exports = {
                 guildMember.send(str);
                 ii++;
             }
-        } else return message.reply(" you must be in a voice channel with at least 3 people!");
+        } else return message.reply("You must be in a voice channel with at least 3 people!");
         
         //Fisher-Yates Shuffle
         function shuffle(array){

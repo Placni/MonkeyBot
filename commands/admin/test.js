@@ -9,8 +9,9 @@ module.exports = {
     description: "a test command!",
     usage: `\`${process.env.PREFIX}test\``,
     alias: ["test"],
+    permission: ['ADMINISTRATOR'],
     disabled: false,
     async execute(message, args, client){ 
-        
+        console.log(await common.findMember(args[0], message));
     }
 }
