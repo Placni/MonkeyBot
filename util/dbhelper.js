@@ -3,6 +3,7 @@ const guildSettings = require('@schema/guildSchema');
 module.exports = {
     globalCache: {},
     async getGuildSettings(guildID) {
+        console.log('called')
         if(!this.globalCache[guildID]){
             let settings = await guildSettings.findOne({_id: guildID});
             if(!settings){

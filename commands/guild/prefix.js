@@ -12,14 +12,14 @@ module.exports = {
     async execute(message, args){ 
         if(!args.length){
             await this.prefixCheck(message).then(prefix => {
-                return message.reply(` your current prefix is \`${prefix}\``);
+                return message.reply(`**Your current prefix is:** \`${prefix}\``);
             })
             return;
         }
         let newPrefix = args.join("");
         if (newPrefix == "reset") newPrefix = process.env.PREFIX;
         await guildSettings.findOneAndUpdate({ _id: message.guild.id }, { prefix: newPrefix });
-        message.reply(`Changed server prefix to \`${newPrefix}\``);
+        message.reply(`**Changed server prefix to:** \`${newPrefix}\``);
         dbhelper.globalCache[message.guild.id].prefix = newPrefix;
     },
 

@@ -14,8 +14,7 @@ module.exports = {
     async execute(message, args, client){ 
         if(message.author.id !== process.env.OWNERID) return message.reply(' you must be the owner to use this!');
 
-        let timestamp = message.guild.createdAt;
-        console.log(moment(timestamp).format("MM/d/YYYY, h:mm:ss a"));
+        console.log(dbhelper.globalCache);
         
     }
 }

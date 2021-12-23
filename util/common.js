@@ -2,6 +2,7 @@ const colors = require('colors');
 
 async function findMember(input, message){
     if(!input) return;
+    input = input.toString();
     const members = await message.guild.members.search({query: input, limit: 1});
     let member = members?.first();
     if(!member){
