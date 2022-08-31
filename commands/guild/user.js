@@ -22,20 +22,20 @@ module.exports = {
         let guildMember;
 
         if (isSlash){
-            guildMember = await findMember(interaction.options.getUser('user'), interaction);
+            guildMember = findMember(interaction.options.getUser('user'), interaction);
             if(!guildMember) guildMember = interaction.member
-            let finalEmbed = buildEmbed(guildMember);
+            let finalEmbed = await buildEmbed(guildMember);
             return interaction.reply({embeds: [finalEmbed]})
         } else {
             if(args[0]){
-                guildMember = await findMember(args[0], interaction);
+                guildMember = findMember(args[0], interaction);
                 if(!guildMember) return interaction.reply(`Couldn't find desired user!`); 
             } else guildMember = interaction.member;
-            let finalEmbed = buildEmbed(guildMember);
+            let finalEmbed = await buildEmbed(guildMember);
             return interaction.reply({embeds: [finalEmbed]});
         }
 
-        function buildEmbed(member){
+        async function buildEmbed(member){
             let userdata = await getGuildUserProfile(interaction.guildId, member.id)
             let nicknames = !userdata.nicknames ? ["No Nicknames Logged"] : userdata.nicknames;
             let vcTime = !userdata.vcTime ? 'None' : userdata.vcTime;

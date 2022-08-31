@@ -24,7 +24,7 @@ module.exports = {
         }
     ],
     permission: ['MOVE_MEMBERS'],
-    execute(interaction, args){ 
+    async execute(interaction, args){ 
         const isSlash = interaction.isCommand?.();
 
         if (isSlash){

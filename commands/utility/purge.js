@@ -22,17 +22,17 @@ module.exports = {
         if (isSlash){
             count = await interaction.options.getInteger('count');
             interaction.deferReply({ ephemeral: true });
-            return blkDel(count);
+            return await blkDel(count);
         } else {
             count = args[0];
             if(!count) return interaction.reply('Please specify an amount of messages!');
             if(isNaN(count) || (count < 1)) return interaction.reply('Please enter a valid number!');
             count = math.ceil(count) > 100 ? 100 : math.ceil(count);
             interaction.deferReply({ ephemeral: true });
-            return blkDel(count);
+            return await blkDel(count);
         }
         
-        function blkDel(int){
+        async function blkDel(int){
             try {
                 await interaction.channel.messages.fetch({limit: count}).then(messages => {
                 interaction.channel.bulkDelete(messages)
