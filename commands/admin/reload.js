@@ -1,6 +1,6 @@
 module.exports = {
     name: "reload",
-    description: "reloads command",
+    description: "reloads a command file",
     usage: `\`${process.env.PREFIX}reload <comname>\``,
     alias: ["rl"],
     disabled: false,
