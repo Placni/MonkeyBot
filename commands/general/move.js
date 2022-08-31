@@ -1,26 +1,56 @@
 const { findVC } = require('@util/common');
-const Discord = require('discord.js');
 
 module.exports = {
     name: "move",
-    description: "move all users from one vc to another",
+    description: "Move all users from one vc to another",
     usage: `\`${process.env.PREFIX}move <vc1> <vc2>\``,
-    alias: ["mv", "moveall"],
+    alias: ["mv"],
     disabled: false,
-    permission: ['MOVE_MEMBERS'],
-    execute(message, args){ 
-        if (!args.length) return message.reply('Specify a target channel!');
-        let origChannel = findVC(args[0], message);
-        if (!origChannel) return message.reply('Couldnt find target channel!');
-        if (origChannel.members.size == 0) return message.reply('The channel must have members to move!');
-        let targetChannel = findVC(args[1], message);
-        if (!targetChannel) return message.reply('Couldnt find target channel!');
-
-        let i = 0
-        for(let [snowflake, guildMember] of origChannel.members){
-            guildMember.voice.setChannel(targetChannel);
-            i++;
+    slash: true,
+    options: [
+        {
+            name: 'target',
+            type: 'CHANNEL',
+            channelTypes: ['GUILD_VOICE'],
+            description: 'Channel to move users from',
+            required: true
+        },
+        {
+            name: 'destination',
+            type: 'CHANNEL',
+            channelTypes: ['GUILD_VOICE'],
+            description: 'Channel to move users into',
+            required: true
         }
-        message.channel.send(`Moved ${i} member(s) from **${origChannel.name}** to **${targetChannel.name}**`);
+    ],
+    permission: ['MOVE_MEMBERS'],
+    execute(interaction, args){ 
+        const isSlash = interaction.isCommand?.();
+
+        if (isSlash){
+            let targetChannel = await findVC(interaction.options.getChannel('target'), interaction);
+            let destChannel = await findVC(interaction.options.getChannel('destination'), interaction);
+            if(!targetChannel || !destChannel) return interaction.reply({content: 'An error has occured', ephemeral: true});
+            if(targetChannel.members.size == 0) return interaction.reply({content: 'Pick a target channel with users in it!', ephemeral: true});
+            let moved = moveMembers(targetChannel, destChannel);
+            interaction.reply({content: `Moved ${moved} member(s) from **${targetChannel.name}** to **${destChannel.name}**`, ephemeral: true});
+        } else {
+            if (!args.length) return interaction.reply('Specify a target and destination channel!');
+            let targetChannel = findVC(args[0], interaction);
+            let destChannel = findVC(args[1], interaction);
+            if(!targetChannel || destChannel) return interaction.reply(`Couldn't locate specified channels!`);
+            if(targetChannel.members.size == 0) return interaction.reply(`Pick a target channel with users in it!`);
+            let moved = moveMembers(targetChannel, destChannel);
+            interaction.reply(`Moved ${moved} member(s) from **${targetChannel.name}** to **${destChannel.name}**`);
+        }
+
+        function moveMembers(target, dest){
+            let i = 0
+            for(let [snowflake, guildMember] of target.members){
+                guildMember.voice.setChannel(dest);
+                i++;
+            }
+            return i;
+        }
     }
 }
