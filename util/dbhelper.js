@@ -3,8 +3,7 @@ const guildSettings = require('@schema/guildSchema');
 module.exports = {
     globalCache: {},
     async getGuildSettings(guildID) {
-        console.log('called')
-        if(!this.globalCache[guildID]){
+        if(!(guildID in this.globalCache)){
             let settings = await guildSettings.findOne({_id: guildID});
             if(!settings){
                 settings = await guildSettings.create({ _id: guildID });
@@ -18,8 +17,8 @@ module.exports = {
 
     async getGuildUserProfile(guildID, userID) {
         let userdata;
-        if(!this.globalCache[guildID]) await this.getGuildSettings(guildID);
-        if(!this.globalCache[guildID].userinfo[userID]){
+        if(!(guildID in this.globalCache)) await this.getGuildSettings(guildID);
+        if(!(userID in this.globalCache[guildID].userinfo)){
             this.globalCache[guildID].userinfo[userID] = {};
             let path = `userinfo.${userID}`;
             await guildSettings.findOneAndUpdate({_id: guildID}, { [path]: {}});
