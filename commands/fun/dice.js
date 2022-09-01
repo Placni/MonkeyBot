@@ -1,19 +1,19 @@
-const Discord = require('discord.js');
-const crypto = require('crypto').webcrypto;
+const { getRandomValues } = require('crypto').webcrypto;
 
 module.exports = {
     name: "dice",
-    description: "rolls 3 dice",
+    description: "Rolls a round of prison dice",
     usage: `\`${process.env.PREFIX}dice\``,
     alias: [],
     disabled: false,
-    async execute(message, args, client){ 
-        let nums = [];
-        let content = "";
-        let count = 1;
+    slash: true,
+    async execute(interaction, args, client){ 
+        var nums = [];
+        var content = "";
+        var count = 1;
 
-        let err = getRandomInt(1, 6, nums);
-        if (err) return message.channel.send(`\`An unexpected error occurred\``);
+        const err = getRandomInt(1, 6, nums);
+        if (err) return interaction.channel.send(`\`An unexpected error occurred\``);
         //For some reason the nums array sometimes doesn't get passed into getRandomInt, causing the bot to crash
         
         let winningNums = checkVals(nums);
@@ -21,8 +21,8 @@ module.exports = {
             const dice = client.emojis.cache.find(emoji => emoji.name === `dice_${e}`);
             content += `${dice.toString()} `
         });
-        message.channel.send(content);
-        message.channel.send(`\n Dice were rolled ${count} time(s)`);
+        interaction.channel.send(content);
+        interaction.channel.send(`\n Dice were rolled ${count} time(s)`);
 
         function checkVals(arr){
             let x = arr[0], y = arr[1], z = arr[2];
@@ -36,7 +36,7 @@ module.exports = {
         }
         function getRandomInt(min, max, output){
             let arr = new Uint8Array(1);
-            crypto.getRandomValues(arr);
+            getRandomValues(arr);
 
             var range = max - min + 1;
             var max_range = 256;

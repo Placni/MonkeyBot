@@ -3,15 +3,21 @@ const math = require('mathjs');
 
 module.exports = {
     name: "mafia",
-    description: "randomly selects villagers and mafia-men from the vc",
+    description: "Starts a game of mafia in your voice channel",
     usage: `\`${process.env.PREFIX}mafia\``,
-    alias: [],
     disabled: false,
-    execute(message, args){ 
-        let vc = message.member.voice.channel;
+    slash: true,
+    permission: ['MOVE_MEMBERS'],
+    execute(interaction){
+        let vc = interaction.member.voice?.channel;
         let randGen = [];
 
         if (vc && vc.members.size >= 3){
+            let vcSize = vc.members.size;
+            for(let [snowflake, guildMember] of vc.members){
+                if(guildMember.user.bot) vcSize--;
+            }
+            if(vcSize < 3) return interaction.reply({ content: 'Voice channel must have 3 non-bot users!' });
             let mafiaCount = math.ceil(vc.members.size / 3);
             for (i = 1; i <= vc.members.size; i++){
                 randGen.push(0);
@@ -23,10 +29,10 @@ module.exports = {
             randGen = shuffle(randGen);
             for(let [snowflake, guildMember] of vc.members){
                 const str = randGen[ii] == 0 ? `You've been selected to be a **villager**!` : `You've been selected to be part of the **mafia**!`;
-                guildMember.send(str);
+                guildMember.send({ content: str });
                 ii++;
             }
-        } else return message.reply("You must be in a voice channel with at least 3 people!");
+        } else return interaction.reply("You must be in a voice channel with at least 3 users!");
         
         //Fisher-Yates Shuffle
         function shuffle(array){

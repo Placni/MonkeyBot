@@ -11,13 +11,13 @@ module.exports = {
         {
             name: 'target',
             type: 'USER',
-            description: 'user to be silenced',
+            description: 'User to be silenced',
             require: true
         },
         {
             name: 'time',
             type: 'INTEGER',
-            description: 'how long the user will be silenced in seconds',
+            description: 'How long the user will be silenced in seconds',
             require: true,
             min_value: 1,
             max_value: 10,
@@ -34,7 +34,7 @@ module.exports = {
             if(!time) time = 5;
             let success = plsShutUp(target, (time * 1000));
             if(!success) return interaction.reply({ content: `An error occured while muting your target!`, ephemeral: true });
-            return interaction.reply({ content: `Muted <@${target.id}> for ${time}s`, ephemeral: true });
+            return interaction.reply({ content: `Silenced <@${target.id}> for ${time}s`, ephemeral: true });
         } else {
             if(!args.length) return interaction.reply({ content: 'Specify a user!' });
             let target = await findMember(args[0], interaction);
@@ -43,7 +43,7 @@ module.exports = {
             (!time || time > 10 || time < 1) ? time = 5 : time = Math.ceil(time);
             let success = plsShutUp(target, (time * 1000));
             if(!success) return interaction.reply({ content: `An error occured while muting your target!` });
-            return interaction.reply({ content: `Muted <@${target.id}> for ${time}s` });
+            return interaction.reply({ content: `Silenced <@${target.id}> for ${time}s` });
         }
 
         function toggleMute(target){

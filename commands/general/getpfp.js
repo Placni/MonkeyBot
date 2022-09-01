@@ -1,9 +1,9 @@
-const common = require('@util/common');
-const Discord = require('discord.js');
+const { findMember } = require('@util/common');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     name: "getpfp",
-    description: "grabs the avatar of a user",
+    description: "Displays the avatar of a user",
     usage: `\`${process.env.PREFIX}getpfp <user>\``,
     alias: ["pfp", "avatar", "av"],
     disabled: false,
@@ -11,7 +11,7 @@ module.exports = {
     options: [
         {
             name: 'user',
-            description: "get the profile picture of this user",
+            description: "Display the profile picture of this user",
             required: false,
             type: 'USER',
         }
@@ -24,22 +24,22 @@ module.exports = {
 
         if (isSlash) {
             caller = interaction.user;
-            target = await common.findMember(interaction.options.get("user")?.user, interaction);
+            target = await findMember(interaction.options.get("user")?.user, interaction);
             if (!target) target = interaction.member;
         } else {
             caller = interaction.author;
             if (!args.length) {
                 target = interaction.member;
             } else {
-                target = await common.findMember(args.join(" "), interaction);
+                target = await findMember(args.join(" "), interaction);
                 if (!target) return interaction.reply("**Couldn't find desired user!**");
             }
         }
-        const pfpEmbed = new Discord.MessageEmbed()
+        const pfpEmbed = new MessageEmbed()
             .setColor('#803d8f')
-            .setAuthor(`${target.displayName}'s pfp`)
+            .setAuthor({name: `${target.displayName}'s pfp`})
             .setImage(target.displayAvatarURL(format))
-            .setFooter(`Called by ${caller.tag}`)
+            .setFooter({text: `Called by ${caller.tag}`})
             .setTimestamp()
         interaction.reply({ embeds: [pfpEmbed] });
     }

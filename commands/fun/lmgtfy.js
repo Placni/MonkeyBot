@@ -10,34 +10,30 @@ module.exports = {
         {
             name: 'question',
             type: 'STRING',
-            description: 'question to google',
-            required: false,
+            description: 'Question to google',
+            required: true,
         }
     ],
     async execute(interaction, args){ 
         const isSlash = interaction.isCommand?.();
         if(isSlash){
             let question = await interaction.options.getString('question');
-            if(!question) {
-                if(!interaction.reference?.messageId) return interaction.reply({ content: 'Input or reply to a question with this command!', ephemeral: true });
-                let origMessage = await interaction.channel.messages.fetch(interaction.reference?.messageId);
-                if(!origMessage?.content) return interaction.reply({ content: 'Message contains no text or was deleted', ephemeral: true });
-                question = origMessage.content.replace(/ /g,"+");
-                return origMessage.reply({ embeds: [buildEmbed(question)] });
-            } else {
-                question = question.replace(/ /g, "+");
-                return interaction.reply({ embeds: [buildEmbed(question)] });
-            }
-        } else {
-            if(!args.length) interaction.reply({ content: 'Specify something to google!'});
-            question = args.split('+');
             return interaction.reply({ embeds: [buildEmbed(question)] });
+        } else {
+            let origMessage = await interaction.channel.messages.fetch(interaction.reference?.messageId);
+            if(!origMessage?.content){
+                if(!args.length) interaction.reply({ content: 'Specify something to google!'});
+                return interaction.reply({ embeds: [buildEmbed(args.join(' '))] });
+            } else {
+                question = origMessage.content;
+                return origMessage.reply({ embeds: [buildEmbed(question)] });
+            }  
         }
         function buildEmbed(string) {
             const finalEmbed = new MessageEmbed()
                 .setColor('#803d8f')
-                .setTitle('For the idiot')
-                .setURL(`https://letmegooglethat.com/?q=${string}`)
+                .setTitle(string)
+                .setURL(`https://letmegooglethat.com/?q=${string.replace(/ /g, "+")}`)
             return finalEmbed;
         }
     }

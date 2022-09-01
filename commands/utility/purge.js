@@ -18,28 +18,26 @@ module.exports = {
     permission: ['MANAGE_MESSAGES'],
     async execute(interaction, args){ 
         const isSlash = interaction.isCommand?.();
-        const count = 0;
+        var count;
         if (isSlash){
             count = await interaction.options.getInteger('count');
             interaction.deferReply({ ephemeral: true });
-            return await blkDel(count);
+            return interaction.editReply({ content: await blkDel(count), ephemeral: true});
         } else {
             count = args[0];
             if(!count) return interaction.reply('Please specify an amount of messages!');
             if(isNaN(count) || (count < 1)) return interaction.reply('Please enter a valid number!');
-            count = math.ceil(count) > 100 ? 100 : math.ceil(count);
-            interaction.deferReply({ ephemeral: true });
-            return await blkDel(count);
+            count = Math.ceil(count) > 100 ? 100 : Math.ceil(count);
+            return interaction.reply({ content: await blkDel(count) });
         }
         
         async function blkDel(int){
             try {
-                await interaction.channel.messages.fetch({limit: count}).then(messages => {
-                interaction.channel.bulkDelete(messages)
-                .then(interaction.editReply({ content: `Successfully purged **${count}** messages`, ephemeral: true}));
-            })
+                await interaction.channel.messages.fetch({limit: int})
+                .then(messages => interaction.channel.bulkDelete(messages))
+                return `Successfully purged ${int} messages`;
             } catch(e) {
-                interaction.editReply({ content: `An error occured`, ephemeral: true });
+                return `An error occured`;
             }
         }
     }

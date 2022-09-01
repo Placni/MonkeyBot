@@ -28,20 +28,20 @@ module.exports = {
         const isSlash = interaction.isCommand?.();
 
         if (isSlash){
-            let targetChannel = await findVC(interaction.options.getChannel('target'), interaction);
-            let destChannel = await findVC(interaction.options.getChannel('destination'), interaction);
+            let targetChannel = await interaction.options.getChannel('target');
+            let destChannel = await interaction.options.getChannel('destination');
             if(!targetChannel || !destChannel) return interaction.reply({content: 'An error has occured', ephemeral: true});
             if(targetChannel.members.size == 0) return interaction.reply({content: 'Pick a target channel with users in it!', ephemeral: true});
             let moved = moveMembers(targetChannel, destChannel);
-            interaction.reply({content: `Moved ${moved} member(s) from **${targetChannel.name}** to **${destChannel.name}**`, ephemeral: true});
+            interaction.reply({content: `Moved ${moved} user(s) from **${targetChannel.name}** to **${destChannel.name}**`, ephemeral: true});
         } else {
             if (!args.length) return interaction.reply('Specify a target and destination channel!');
             let targetChannel = findVC(args[0], interaction);
             let destChannel = findVC(args[1], interaction);
-            if(!targetChannel || destChannel) return interaction.reply(`Couldn't locate specified channels!`);
+            if(!targetChannel || !destChannel) return interaction.reply(`Couldn't locate specified channels!`);
             if(targetChannel.members.size == 0) return interaction.reply(`Pick a target channel with users in it!`);
             let moved = moveMembers(targetChannel, destChannel);
-            interaction.reply(`Moved ${moved} member(s) from **${targetChannel.name}** to **${destChannel.name}**`);
+            interaction.reply(`Moved ${moved} user(s) from **${targetChannel.name}** to **${destChannel.name}**`);
         }
 
         function moveMembers(target, dest){

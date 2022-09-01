@@ -21,7 +21,7 @@ module.exports = async (Discord, client, message) => {
     for (c of client.commands) {
         if (command == c[0] || (c[1].alias !== undefined && Object.values(c[1].alias).includes(command))) {
             if (c[1].disabled == true) {
-                return message.reply(" that command is disabled");
+                return message.reply("That command is disabled");
             } else {
                 if (c[1].permission == undefined || c[1].permission.some(e => message.member.permissionsIn(message.channel).toArray().includes(e))) {
                     try {

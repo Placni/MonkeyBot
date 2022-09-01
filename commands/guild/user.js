@@ -1,4 +1,4 @@
-const { getGuildUserProfile } = require('@util/dbhelper');
+const dbhelper = require('@util/dbhelper');
 const { findMember, hhmmss } = require('@util/common');
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment');
@@ -22,13 +22,13 @@ module.exports = {
         let guildMember;
 
         if (isSlash){
-            guildMember = findMember(interaction.options.getUser('user'), interaction);
+            guildMember = await findMember(interaction.options.getUser('user'), interaction);
             if(!guildMember) guildMember = interaction.member
             let finalEmbed = await buildEmbed(guildMember);
             return interaction.reply({embeds: [finalEmbed]})
         } else {
             if(args[0]){
-                guildMember = findMember(args[0], interaction);
+                guildMember = await findMember(args[0], interaction);
                 if(!guildMember) return interaction.reply(`Couldn't find desired user!`); 
             } else guildMember = interaction.member;
             let finalEmbed = await buildEmbed(guildMember);
@@ -36,7 +36,7 @@ module.exports = {
         }
 
         async function buildEmbed(member){
-            let userdata = await getGuildUserProfile(interaction.guildId, member.id)
+            let userdata = await dbhelper.getGuildUserProfile(interaction.guildId, member.id)
             let nicknames = !userdata.nicknames ? ["No Nicknames Logged"] : userdata.nicknames;
             let vcTime = !userdata.vcTime ? 'None' : userdata.vcTime;
             if (vcTime !== 'None') vcTime = hhmmss(vcTime);

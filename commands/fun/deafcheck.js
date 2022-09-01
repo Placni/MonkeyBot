@@ -20,28 +20,28 @@ module.exports = {
     async execute(interaction, args){ 
         const isSlash = interaction.isCommand?.();
         if(isSlash){
-            let targetVC = await findVC(interaction.options.getChannel('channel'), interaction);
-            if(targetVC) return interaction.reply({content: 'An error has occured', ephemeral: true});
-            let moved = deafCheck(targetVC);
-            return interaction.reply({ content: `Removed ${moved} members from ${targetVC.name}`, ephemeral: true });
+            let targetVC = interaction.options.getChannel('channel');
+            console.log(targetVC);
+            if(targetVC.members?.size === 0) return interaction.reply({ content: `Voice channel must have users in it!`, ephemeral: true });
+            return interaction.reply({ content: `Removed **${deafCheck(targetVC)}** user(s) from **${targetVC.name}**`, ephemeral: true });
         } else {
             if(!args.length) return interaction.reply({ content: 'Specify a voice channel!'});
             let targetVC = findVC(args[0], interaction);
-            if(!targetVC) return interaction.reply({ content: 'Error finding specified voice channel!' });
-            let moved = deafCheck(targetVC);
-            return interaction.reply({ content: `Removed ${moved} users from ${targetVC.name}` });
+            if(!targetVC) return interaction.reply({ content: 'Couldn\'t find that voice channel!' });
+            if(targetVC.members?.size === 0) return interaction.reply({ content: `Voice channel must have users in it!` });
+            return interaction.reply({ content: `Removed **${deafCheck(targetVC)}** user(s) from **${targetVC.name}**` });
         }
         function deafCheck(targetVC) {
-            let i;
-            let channel = (!common.findVC('afk', interaction)) ? common.findVC('afk', interaction) : null;
+            let i = 0;
+            let channel = (!interaction.guild?.afkChannel) ? null : interaction.guild.afkChannel;
             for(let [snowflake, guildMember] of targetVC.members){
-                if(guildMember.voice.selfDeaf){
+                if(guildMember.voice?.selfDeaf){
                     guildMember.voice.setChannel(channel);
                     guildMember.send(`**${interaction.member.user.tag}** removed you from vc for being deafened`);
                     i++;
-                }
-            return i;
+                } else continue;
             }
+            return i;
         }
     }
 }
