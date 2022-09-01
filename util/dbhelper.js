@@ -2,32 +2,32 @@ const guildSettings = require('@schema/guildSchema');
 
 module.exports = {
     globalCache: {},
-    async getGuildSettings(guildID) {
-        if(!(guildID in this.globalCache)){
-            let settings = await guildSettings.findOne({_id: guildID});
+    async getGuildSettings(guildId) {
+        if(!(guildId in this.globalCache)){
+            let settings = await guildSettings.findOne({_id: guildId});
             if(!settings){
-                settings = await guildSettings.create({ _id: guildID });
+                settings = await guildSettings.create({ _id: guildId });
                 settings.userinfo = {};
                 settings.save();
             }
-            this.globalCache[guildID] = settings;
-            return this.globalCache[guildID];
-        } else return this.globalCache[guildID];
+            this.globalCache[guildId] = settings;
+            return this.globalCache[guildId];
+        } else return this.globalCache[guildId];
     },
 
-    async getGuildUserProfile(guildID, userID) {
+    async getGuildUserProfile(guildId, userId) {
         let userdata;
-        if(!(guildID in this.globalCache)) await this.getGuildSettings(guildID);
-        if(!(userID in this.globalCache[guildID].userinfo)){
-            this.globalCache[guildID].userinfo[userID] = {};
-            let path = `userinfo.${userID}`;
-            await guildSettings.findOneAndUpdate({_id: guildID}, { [path]: {}});
-            return userdata = this.globalCache[guildID].userinfo[userID];
-        } else return userdata = this.globalCache[guildID].userinfo[userID];
+        if(!(guildId in this.globalCache)) await this.getGuildSettings(guildId);
+        if(!(userId in this.globalCache[guildId].userinfo)){
+            this.globalCache[guildId].userinfo[userId] = {};
+            let path = `userinfo.${userId}`;
+            await guildSettings.findOneAndUpdate({_id: guildId}, { [path]: {}});
+            return userdata = this.globalCache[guildId].userinfo[userId];
+        } else return userdata = this.globalCache[guildId].userinfo[userId];
     },
 
-    async updateUserProfile(guildID, path, data) {
-        let newdat = await guildSettings.findOneAndUpdate({ _id: guildID }, { [path]: data }, {new: true})
-        this.globalCache[guildID] = newdat;
+    async updateUserProfile(guildId, path, data) {
+        let newdat = await guildSettings.findOneAndUpdate({ _id: guildId }, { [path]: data }, {new: true})
+        this.globalCache[guildId] = newdat;
     }
 }
