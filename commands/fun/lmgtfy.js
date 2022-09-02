@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
     name: "lmgtfy",
     description: "Let me google that for you",
-    usage: `\`${process.env.PREFIX}lmgtfy <text>\``,
+    usage: `\`${process.env.PREFIX}lmgtfy <text> OR reply to a message\``,
     disabled: false,
     slash: true,
     options: [

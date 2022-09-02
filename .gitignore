@@ -105,4 +105,5 @@ dist
 config.js
 /temp
 
-/videocache
+test.js
+test2.js
