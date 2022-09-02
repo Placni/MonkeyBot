@@ -8,8 +8,8 @@ module.exports = async (Discord, client, message) => {
         track.trackMessages(message);
         let words = await client.commands.get('trackword').wordCheck(message.guild.id);
         if (words.length > 0){
-            if (new RegExp(words.join("|")).test(message.content)) {
-                track.trackWords(message, client, words);
+            if (new RegExp(words.join("|")).test(message.content.toLowerCase())) {
+                track.trackWords(message, words);
             }
         } else return;
         return;

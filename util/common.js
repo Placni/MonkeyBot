@@ -1,5 +1,4 @@
-const colors = require('colors');
-
+// Returns the guildMember object that matches string input
 async function findMember(input, message) {
     if (!input) return;
     input = input.toString();
@@ -13,12 +12,14 @@ async function findMember(input, message) {
     return member;
 }
 
+// Returns any Discord channel object that matches string input
 function findChannel(input, message) {
     if (!input) return;
     const filter = input?.match(/^<#(\d+)>$/);
     if (filter) return message.guild.channels.cache.get(filter[1]);
 }
 
+// Returns the Discord voiceChannel object that matches string input
 function findVC(input, message) {
     if (!input) return;
     input = input.toLowerCase();
@@ -35,24 +36,35 @@ function findVC(input, message) {
     return vc;
 }
 
+// Converts our normal args array into a string
 function ArgsToString(args) {
     newArgs = args.length > 1 ? args.join(" ") : args;
     return String(newArgs);
 }
 
+// Returns what permissions a user has
 function PermissionCheck(message, permission) {
     return message.member.permissionsIn(message.channel).toArray();
 }
 
+// Breaks down seconds into a string formatted HH:MM:SS
 function hhmmss(secs) {
-    function pad(num) {
-        return ("0" + num).slice(-2);
-    }
     var mins = Math.floor(secs / 60);
     secs = Math.floor(secs % 60)
     var hrs = Math.floor(mins / 60);
     mins = mins % 60
-    return `\`${hrs}hrs ${mins}mins ${secs}s\``
+    return `${hrs}h ${mins}m ${secs}s`
+}
+
+// Sanitizes user input strings
+// First denotes whether to only return first word or the entire string
+function sanitizeString(str, first){
+    str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
+    if(first){
+        if(str.match(/^(\S+)\s(.*)/)){
+            return str = str.match(/^(\S+)\s(.*)/).at(1)
+        } else return str
+    } else return str.trim();
 }
 
 module.exports = {
@@ -61,5 +73,6 @@ module.exports = {
     findChannel,
     ArgsToString,
     PermissionCheck,
-    hhmmss
+    hhmmss,
+    sanitizeString,
 }

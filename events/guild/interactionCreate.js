@@ -17,7 +17,7 @@ module.exports = async (Discord, client, interaction) => {
     let settings = await dbhelper.getGuildSettings(guildId);
     if (settings.blacklist.includes(interaction.user.id)) return interaction.reply({ content: '**Seems like you have been blacklisted from using me in this guild**', ephemeral: true });
 
-    execute(interaction).catch(err => {
+    execute(interaction, null, client).catch(err => {
         console.log(err);
         !interaction.deffered
             ? interaction.reply({ content: '**An error has occured.**', ephemeral: true })

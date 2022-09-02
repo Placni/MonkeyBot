@@ -5,52 +5,53 @@ const Discord = require('discord.js');
 module.exports = {
     name: "track",
     cache: { voice: {} },
-    async trackWords(message, client, words){ 
-        let userdata = await dbhelper.getGuildUserProfile(message.guild.id, message.author.id);
+    async trackWords(message, words){ 
+        let userdata = await dbhelper.getGuildUserProfile(message.guildId, message.author.id);
         if(!userdata.trackers) userdata.trackers = {};
         let trackers = userdata.trackers;
-        words.forEach(element => {
-            let occurences = (message.content.split(element).length - 1);
+        words.forEach(e => {
+            let occurences = (message.content.toLowerCase().split(e).length - 1);
             if (occurences > 5) occurences = 5;
-            if (!trackers[element]){
-                trackers[element] = occurences;
-            } else trackers[element] += occurences;
+            if (!trackers[e]){
+                trackers[e] = occurences;
+            } else trackers[e] += occurences;
         });
-        await dbhelper.updateUserProfile(message.guild.id, `userinfo.${message.author.id}.trackers`, trackers);
+        await dbhelper.updateUserProfile(message.guildId, `userinfo.${message.author.id}.trackers`, trackers);
     },
     async trackMessages(message){
-        let userdata = await dbhelper.getGuildUserProfile(message.guild.id, message.author.id);
+        let userdata = await dbhelper.getGuildUserProfile(message.guildId, message.author.id);
         if(!userdata.msgCount) userdata.msgCount = 0;
         let msgCount = userdata.msgCount;
         msgCount++;
-        await dbhelper.updateUserProfile(message.guild.id, `userinfo.${message.author.id}.msgCount`, msgCount);
+        await dbhelper.updateUserProfile(message.guildId, `userinfo.${message.author.id}.msgCount`, msgCount);
     },
     async trackVCTime(voiceState, joined){
-        let userID = voiceState.id;
-        let guildID = voiceState.member.guild.id;
+        let userId = voiceState.id;
+        let guildId = voiceState.member.guild.id;
         if(joined){
-            if(!this.cache.voice[guildID]){
-                this.cache.voice[guildID] = {[userID]: Date.now()};
+            if(!this.cache.voice[guildId]){
+                this.cache.voice[guildId] = {[userId]: Date.now()};
                 return;
-            } else this.cache.voice[guildID][userID] = Date.now();
+            } else this.cache.voice[guildId][userId] = Date.now();
         } else {
-            if(!this.cache.hasOwnProperty(userID)) return;
-            let joinTime = this.cache.voice[guildID][userID];
+            console.log(this.cache);
+            if(!this.cache.voice[guildId][userId]) return console.log('bruh');
+            let joinTime = this.cache.voice[guildId][userId];
             let diff = Math.floor((Date.now() - joinTime) / 1000);
-            let userdata = await dbhelper.getGuildUserProfile(guildID, userID);
+            let userdata = await dbhelper.getGuildUserProfile(guildId, userId);
             let total = !userdata.vcTime ? diff : userdata.vcTime + diff;
-            dbhelper.updateUserProfile(guildID, `userinfo.${userID}.vcTime`, total)
+            dbhelper.updateUserProfile(guildId, `userinfo.${userId}.vcTime`, total)
         }
     },
     async trackNicknames(oldMember){
         let oldNick = oldMember.displayName;
-        let guildID = oldMember.guild.id;
-        let userID = oldMember.id
-        let userdata = await dbhelper.getGuildUserProfile(guildID, userID);
+        let guildId = oldMember.guildId;
+        let userId = oldMember.id
+        let userdata = await dbhelper.getGuildUserProfile(guildId, userId);
         let nicknames = !userdata.nicknames ? [] : userdata.nicknames;
         nicknames.push(oldNick);
         if(nicknames.length > 4) nicknames.shift();
         userdata.nicknames = nicknames;
-        await dbhelper.updateUserProfile(guildID, `userinfo.${userID}.nicknames`, nicknames);
+        await dbhelper.updateUserProfile(guildId, `userinfo.${userId}.nicknames`, nicknames);
     }
 }

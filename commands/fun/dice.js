@@ -7,7 +7,8 @@ module.exports = {
     alias: [],
     disabled: false,
     slash: true,
-    async execute(interaction, args, client){ 
+    async execute(interaction, args, client){
+        const isSlash = interaction.isCommand?.();
         var nums = [];
         var content = "";
         var count = 1;
@@ -21,6 +22,8 @@ module.exports = {
             const dice = client.emojis.cache.find(emoji => emoji.name === `dice_${e}`);
             content += `${dice.toString()} `
         });
+
+        if(isSlash) interaction.reply({ content: '\u200b' });
         interaction.channel.send(content);
         interaction.channel.send(`\n Dice were rolled ${count} time(s)`);
 

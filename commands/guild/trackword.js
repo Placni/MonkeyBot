@@ -1,11 +1,12 @@
 const guildSettings = require('@schema/guildSchema');
 const dbhelper = require('@util/dbhelper');
 const { MessageEmbed } = require('discord.js');
+const { sanitizeString } = require('@util/common');
 
 var self = module.exports = {
     name: "trackword",
     description: "add or delete a word to track in your server",
-    usage: `\`${process.env.PREFIX}trackword <add/delete/clear> <word>\``,
+    usage: `\`${process.env.PREFIX}trackword <add/del/clear> <word>\``,
     alias: [],
     disabled: false,
     slash: true,
@@ -14,13 +15,13 @@ var self = module.exports = {
             name: 'add',
             type: 'SUB_COMMAND',
             description: 'Adds a word to be tracked',
-            options: [{ name: 'word', type: 'STRING', description: 'What word to be tracked', required: true }]
+            options: [{ name: 'word', type: 'STRING', description: 'What word to be tracked. Note that the bot will only see the first word you type', required: true }]
         },
         {
             name: 'delete',
             type: 'SUB_COMMAND',
             description: 'Deletes a currently tracked word',
-            options: [{ name: 'word', type: 'STRING', description: 'What word to be deleted', required: true }]
+            options: [{ name: 'word', type: 'STRING', description: 'What word to be deleted. Note that the bot will only see the first word you type', required: true }]
         },
         {
             name: 'clear',
@@ -37,24 +38,28 @@ var self = module.exports = {
     async execute(interaction, args){ 
         const isSlash = interaction.isCommand?.();
         const guildId = interaction.guild.id;
-        var word;
-        let words;
+        var word, words;
 
         if(isSlash) {
             const com = interaction.options.getSubcommand(true);
             await interaction.deferReply({ ephemeral: true });
             switch(com) {
                 case 'add':
-                    word = interaction.options.getString('word');
+                    word = sanitizeString(interaction.options.getString('word'), true).toLowerCase();
                     return interaction.editReply({ content: await addWord(word), ephemeral: true});
                 break;
                 case 'delete':
-                    word = interaction.options.getString('word');
+                    word = sanitizeString(interaction.options.getString('word'), true).toLowerCase();
                     return interaction.editReply({ content: await delWord(word), ephemeral: true});
                 break;
                 case 'clear':
-                    await updateWords([]);
-                    return interaction.editReply({ content: `Your server is no longer tracking any words!`, ephemeral: true});
+                    words = await self.wordCheck(guildId);
+                    if(!words.length) {
+                        return interaction.editReply({ content: 'Your server isn\'t tracking any words!', ephemeral: true });
+                    } else {
+                        await updateWords([]);
+                        return interaction.editReply({ content: `Your server is no longer tracking any words!`, ephemeral: true});
+                    }
                 break;
                 case 'list':
                     words = await self.wordCheck(guildId);
@@ -64,11 +69,36 @@ var self = module.exports = {
                 break;
             }
         } else {
-            return;
+            if(!args.length){
+                words = await self.wordCheck(guildId);
+                if(!words.length) {
+                    return interaction.reply({ content: 'Your server isn\'t tracking any words!' });
+                } else return interaction.reply({ embeds: [wordsEmbed(words)] });
+            }
+            switch(args[0]){
+                case 'add':
+                    word = sanitizeString(args[1], true);
+                    return interaction.reply({ content: await addWord(word) })
+                break;
+                case 'del':
+                case 'delete':
+                    word = sanitizeString(args[1], true);
+                    return interaction.reply({ content: await delWord(word) })
+                break;
+                case 'clear':
+                    words = await self.wordCheck(guildId);
+                    if(!words.length) {
+                        return interaction.reply({ content: 'Your server isn\'t tracking any words!' });
+                    } else {
+                        await updateWords([]);
+                        return interaction.reply({ content: `Your server is no longer tracking any words!` });
+                    };
+                break;
+            }
         }
 
         async function delWord(word){
-            let words = await this.wordCheck(guildId);
+            let words = await self.wordCheck(guildId);
             if(!words.includes(word)) return `This server isn't tracking **${word}**!`;
             words = words.filter(e => e !== word);
             await updateWords(words);
@@ -76,7 +106,7 @@ var self = module.exports = {
         }
 
         async function addWord(word){
-            let words = await this.wordCheck(guildId);
+            let words = await self.wordCheck(guildId);
             if(words.includes(word)) return `This server is already tracking **${word}**!`;
             words.push(word);
             await updateWords(words);
@@ -89,22 +119,21 @@ var self = module.exports = {
         }
 
         function wordsEmbed(list){
-            let words = list.join(`\n`);
             const wordsEmbed = new MessageEmbed()
             .setColor('#803d8f')
             .setAuthor({ name: "Currently Tracking:", iconURL: interaction.guild.iconURL({ format: "png", dynamic: true, size: 2048 })})
-            .addFields({ name: `Total: ${words.length}`, value: 'words' })
-            .setFooter({ text: `\`Use /leaderboard {word}\` to check the leaderboards` })
+            .addFields({ name: `Total: ${list.length}`, value: list.join('\n') })
+            .setFooter({ text: `Use \`/leaderboard {word}\` to check the leaderboards` })
             return wordsEmbed;
         }
     },
     async wordCheck(guildId){
-        let words;
+
         if (!dbhelper.globalCache[guildId]){
             await dbhelper.getGuildSettings(guildId);
-            return words = dbhelper.globalCache[guildId].trackedwords;
+            return dbhelper.globalCache[guildId].trackedwords;
         } else {
-            return words = dbhelper.globalCache[guildId].trackedwords;
+            return dbhelper.globalCache[guildId].trackedwords;
         }
     }
 }

@@ -1,5 +1,5 @@
 const { findMember } = require('@util/common');
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const guildSettings = require('@schema/guildSchema');
 const dbhelper = require('@util/dbhelper');
 
@@ -9,37 +9,47 @@ module.exports = {
     usage: `\`${process.env.PREFIX}blacklist <user>\``,
     alias: ["bl"],
     disabled: false,
+    slash: true,
+    options: [
+        {
+            name: 'print',
+            type: 'SUB_COMMAND',
+            description: 'Prints the current blacklist'
+        },
+        {
+            name: 'toggle',
+            type: 'SUB_COMMAND',
+            options: [{ name: 'user', type: 'USER', description: 'User to add / remove from the blacklist', required: true }],
+            description: 'Add or remove a user from the blacklist'
+        }
+    ],
     permission: ['ADMINISTRATOR'],
-    async execute(message, args){ 
-        if(message.author.id !== message.guild.ownerId) return message.reply('You must be the server owner to use this!');
+    async execute(interaction, args){ 
+        const isSlash = interaction.isCommand?.();
+        const guildId = interaction.guildId;
+        var blackList, target;
 
-        let guildID = message.guildId;
-        if(!args.length){
-            await dbhelper.getGuildSettings(guildID);
-            let blacklist = dbhelper.globalCache[guildID].blacklist
-            if(!blacklist.length) return message.reply('No one is blacklisted in this server!');
-            return message.channel.send({embeds: [blEmbed(blacklist)]});
-        }
-        let target = await findMember(args[0], message);
-        if(!target) return message.reply('Couldnt find desired user!');
-
-        if(!dbhelper.globalCache[guildID]) await dbhelper.getGuildSettings(guildID);
-        if(!dbhelper.globalCache[guildID].blacklist){
-            dbhelper.globalCache[guildID].blacklist = [target];
-            await UpdateDB([target]);
-            return message.channel.send(`<@${target.user.id}> has been added to the blacklist`);
-        }
-        let blacklist = dbhelper.globalCache[guildID].blacklist
-        if(blacklist.includes(target.user.id)){
-            let newlist = blacklist.filter(e => e !== target.user.id);
-            dbhelper.globalCache[guildID].blacklist = newlist;
-            await UpdateDB(newlist);
-            return message.channel.send(`<@${target.user.id}> has been removed from the blacklist`);
+        if(isSlash){
+            const com = interaction.options.getSubcommand(true);
+            await interaction.deferReply({ ephemeral: true });
+            switch(com){
+                case 'print':
+                    blackList = await getBl();
+                    if(!blackList.length) return interaction.editReply({ content: 'This guild has no users blacklisted!', ephemeral: true });
+                    return interaction.editReply({ embeds: [blEmbed(blackList)], ephemeral: true });
+                case 'toggle':
+                    target = interaction.options.getUser('user');
+                    return interaction.editReply({ content: await toggleMember(target), ephemeral: true });
+            }
         } else {
-            blacklist.push(target.user.id);
-            dbhelper.globalCache[guildID].blacklist = blacklist;
-            await UpdateDB(blacklist);
-            return message.channel.send(`<@${target.user.id}> has been added to the blacklist`);
+            if(!args.length){
+                blackList = await getBl();
+                if(!blackList.length) return interaction.reply({ content: 'This guild has no users blacklisted!' });
+                return interaction.reply({ embeds: [blEmbed(blackList)] });
+            }
+            target = await findMember(args[0], interaction);
+            if(!target) return interaction.reply({ content: 'Couldn\'t find desired user!' });
+            return interaction.reply({ content: await toggleMember(target) });
         }
 
         function blEmbed(list){
@@ -48,14 +58,30 @@ module.exports = {
                 users.push(`<@${e}>`);
             });
             users = users.join(`\n`);
-            const blEmbed = new Discord.MessageEmbed()
-            .setColor('#803d8f')
-            .setAuthor(message.guild.name, message.guild.iconURL({ format: "png", dynamic: true, size: 2048 }))
-            .addField('​**Current Blacklist:**', users)
+            const blEmbed = new MessageEmbed()
+                .setColor('#803d8f')
+                .setAuthor({ name: interaction.guild.name, iconURL: interaction.guild.iconURL({ format: "png", dynamic: true, size: 2048 })})
+                .addFields({ name: '**Current Blacklist:**', value: users })
             return blEmbed;
         }
-        async function UpdateDB(list){
-            await guildSettings.findOneAndUpdate({ _id: guildID }, { blacklist: list });
+        async function toggleMember(target){
+            var blackList = await getBl();
+            if(blackList.includes(target)){
+                blackList = blackList.filter(e => e !== target);
+                dbhelper.globalCache[guildId].blacklist = blackList;
+                await guildSettings.findOneAndUpdate({ _id: guildId }, { blacklist: blackList });
+                return `No longer blacklisting <@${target.user.id}> in this guild`;
+            } else {
+                blackList.push(target);
+                dbhelper.globalCache[guildId].blacklist = blackList;
+                await guildSettings.findOneAndUpdate({ _id: guildId }, { blacklist: blackList });
+                return `Now blacklisting <@${target.user.id}> in this guild`;
+            }
+        }
+        async function getBl(){
+            let settings;
+            (!dbhelper.globalCache[guildId]) ? settings = await dbhelper.getGuildSettings() : settings = dbhelper.globalCache[guildId];
+            return settings.blacklist;
         }
     }
 }
