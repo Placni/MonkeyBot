@@ -1,4 +1,5 @@
 const { findMember } = require('@util/common');
+const { ApplicationCommandType, ApplicationCommandOptionType, PermissionFlagsBits, InteractionType } = require('discord.js');
 
 module.exports = {
     name: "shutup",
@@ -7,25 +8,26 @@ module.exports = {
     alias: ["silence"],
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: 'target',
-            type: 'USER',
+            type: ApplicationCommandOptionType.User,
             description: 'User to be silenced',
             require: true
         },
         {
             name: 'time',
-            type: 'INTEGER',
+            type: ApplicationCommandOptionType.Integer,
             description: 'How long the user will be silenced in seconds',
             require: true,
             min_value: 1,
             max_value: 10,
         }
     ],
-    permission: ['MUTE_MEMBERS'],
+    permission: PermissionFlagsBits.MuteMembers,
     async execute(interaction, args){
-        const isSlash = interaction.isCommand?.();
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
 
         if(isSlash) {
             let target = await findMember(interaction.options.getUser('target'), interaction);

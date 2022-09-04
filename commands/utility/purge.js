@@ -1,3 +1,5 @@
+const { ApplicationCommandType, ApplicationCommandOptionType, PermissionFlagsBits, InteractionType } = require('discord.js');
+
 module.exports = {
     name: "purge",
     description: "Purges messages from the channel",
@@ -5,20 +7,22 @@ module.exports = {
     alias: ["clear"],
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: 'count',
-            type: 'INTEGER',
+            type: ApplicationCommandOptionType.Integer,
             description: 'Number of messages to be purged',
             required: true,
             min_value: 1,
             max_value: 100,
         }
     ],
-    permission: ['MANAGE_MESSAGES'],
+    permission: PermissionFlagsBits.ManageMessages,
     async execute(interaction, args){ 
-        const isSlash = interaction.isCommand?.();
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
         var count;
+        
         if (isSlash){
             count = await interaction.options.getInteger('count');
             interaction.deferReply({ ephemeral: true });

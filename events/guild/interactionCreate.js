@@ -1,10 +1,11 @@
+const { PermissionFlagsBits, InteractionType } = require('discord.js');
 const dbhelper = require('@util/dbhelper');
 
 module.exports = async (Discord, client, interaction) => {
-    if (!interaction.guild || !interaction.isCommand() || interaction.user.bot) return;
+    if (!interaction.guild || !interaction.type === InteractionType.ApplicationCommand || interaction.user.bot) return;
     const command = client.commands.get(interaction.commandName);
     const { disabled = false, permission = [], execute } = command;
-    let guildId = interaction.member.guild.id;
+    const guildId = interaction.member.guild.id;
 
     const missingPerms = permission.filter(perm => !interaction.member.permissions.has(perm));
     if (missingPerms.length) {

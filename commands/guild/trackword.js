@@ -1,42 +1,42 @@
+const { ApplicationCommandType, ApplicationCommandOptionType, EmbedBuilder, PermissionFlagsBits, InteractionType } = require('discord.js');
+const { sanitizeString } = require('@util/common');
 const guildSettings = require('@schema/guildSchema');
 const dbhelper = require('@util/dbhelper');
-const { MessageEmbed } = require('discord.js');
-const { sanitizeString } = require('@util/common');
 
 var self = module.exports = {
     name: "trackword",
     description: "add or delete a word to track in your server",
     usage: `\`${process.env.PREFIX}trackword <add/del/clear> <word>\``,
-    alias: [],
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: 'add',
-            type: 'SUB_COMMAND',
+            type: ApplicationCommandOptionType.Subcommand,
             description: 'Adds a word to be tracked',
-            options: [{ name: 'word', type: 'STRING', description: 'What word to be tracked. Note that the bot will only see the first word you type', required: true }]
+            options: [{ name: 'word', type: ApplicationCommandOptionType.String, description: 'What word to be tracked. Note that the bot will only see the first word you type', required: true }]
         },
         {
             name: 'delete',
-            type: 'SUB_COMMAND',
+            type: ApplicationCommandOptionType.Subcommand,
             description: 'Deletes a currently tracked word',
-            options: [{ name: 'word', type: 'STRING', description: 'What word to be deleted. Note that the bot will only see the first word you type', required: true }]
+            options: [{ name: 'word', type: ApplicationCommandOptionType.String, description: 'What word to be deleted. Note that the bot will only see the first word you type', required: true }]
         },
         {
             name: 'clear',
-            type: 'SUB_COMMAND',
+            type: ApplicationCommandOptionType.Subcommand,
             description: 'Clears your currently tracked words',
         },
         {
             name: 'list',
-            type: 'SUB_COMMAND',
+            type: ApplicationCommandOptionType.Subcommand,
             description: 'Displays a list of currently tracked words'
         }
     ],
-    permission: ['MANAGE_MESSAGES'],
+    permission: PermissionFlagsBits.ManageMessages,
     async execute(interaction, args){ 
-        const isSlash = interaction.isCommand?.();
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
         const guildId = interaction.guild.id;
         var word, words;
 
@@ -119,7 +119,7 @@ var self = module.exports = {
         }
 
         function wordsEmbed(list){
-            const wordsEmbed = new MessageEmbed()
+            const wordsEmbed = new EmbedBuilder()
             .setColor('#803d8f')
             .setAuthor({ name: "Currently Tracking:", iconURL: interaction.guild.iconURL({ format: "png", dynamic: true, size: 2048 })})
             .addFields({ name: `Total: ${list.length}`, value: list.join('\n') })

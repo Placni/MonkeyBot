@@ -3,14 +3,16 @@ require("module-alias/register");
 require('log-timestamp');
 require('dotenv').config();
 
+const { GatewayIntentBits } = Discord;
 const client = new Discord.Client({
     intents: [
-        "GUILDS",
-        "GUILD_MEMBERS",
-        "GUILD_EMOJIS_AND_STICKERS",
-        "GUILD_VOICE_STATES",
-        "GUILD_MESSAGES",
-        "GUILD_MESSAGE_REACTIONS",
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildEmojisAndStickers,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.MessageContent,
     ],
     failIfNotExists: false,
 });

@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const { ApplicationCommandType, ApplicationCommandOptionType, InteractionType } = require('discord.js');
 
 module.exports = {
     name: "lmgtfy",
@@ -6,16 +7,17 @@ module.exports = {
     usage: `\`${process.env.PREFIX}lmgtfy <text> OR reply to a message\``,
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: 'question',
-            type: 'STRING',
+            type: ApplicationCommandOptionType.String,
             description: 'Question to google',
             required: true,
         }
     ],
-    async execute(interaction, args){ 
-        const isSlash = interaction.isCommand?.();
+    async execute(interaction, args){
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
         if(isSlash){
             let question = await interaction.options.getString('question');
             return interaction.reply({ embeds: [buildEmbed(question)] });

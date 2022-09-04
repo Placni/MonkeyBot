@@ -1,3 +1,4 @@
+const { ApplicationCommandType, ApplicationCommandOptionType, PermissionFlagsBits, InteractionType } = require('discord.js');
 const guildSettings = require('@schema/guildSchema');
 const dbhelper = require('@util/dbhelper');
 
@@ -8,20 +9,21 @@ var self = module.exports = {
     alias: [],
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: 'print',
-            type: 'SUB_COMMAND',
+            type: ApplicationCommandOptionType.Subcommand,
             description: 'Prints your server\'s current prefix'
         },
         {
             name: 'change',
-            type: 'SUB_COMMAND',
-            options: [{ name: 'prefix', type: 'STRING', description: 'New server prefix', required: true }],
+            type: ApplicationCommandOptionType.Subcommand,
+            options: [{ name: 'prefix', type: ApplicationCommandOptionType.String, description: 'New server prefix', required: true }],
             description: 'Changes your server prefix'
         }
     ],
-    permission: ['ADMINISTRATOR'],
+    permission: PermissionFlagsBits.ManageGuild,
     async execute(interaction, args){
         const isSlash = interaction.isCommand?.()
         const guildId = interaction.guild.id;

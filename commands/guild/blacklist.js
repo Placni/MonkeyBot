@@ -1,31 +1,32 @@
+const { ApplicationCommandType, ApplicationCommandOptionType, EmbedBuilder, PermissionFlagsBits, InteractionType } = require('discord.js');
 const { findMember } = require('@util/common');
-const { MessageEmbed } = require('discord.js');
 const guildSettings = require('@schema/guildSchema');
 const dbhelper = require('@util/dbhelper');
 
 module.exports = {
     name: "blacklist",
-    description: "blacklist a user from using the bot in your server",
+    description: "Blacklist a user from using the bot in your server",
     usage: `\`${process.env.PREFIX}blacklist <user>\``,
     alias: ["bl"],
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: 'print',
-            type: 'SUB_COMMAND',
+            type: ApplicationCommandOptionType.Subcommand,
             description: 'Prints the current blacklist'
         },
         {
             name: 'toggle',
-            type: 'SUB_COMMAND',
-            options: [{ name: 'user', type: 'USER', description: 'User to add / remove from the blacklist', required: true }],
+            type: ApplicationCommandOptionType.Subcommand,
+            options: [{ name: 'user', type: ApplicationCommandOptionType.User, description: 'User to add / remove from the blacklist', required: true }],
             description: 'Add or remove a user from the blacklist'
         }
     ],
-    permission: ['ADMINISTRATOR'],
+    permission: PermissionFlagsBits.ManageGuild,
     async execute(interaction, args){ 
-        const isSlash = interaction.isCommand?.();
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
         const guildId = interaction.guildId;
         var blackList, target;
 
@@ -58,7 +59,7 @@ module.exports = {
                 users.push(`<@${e}>`);
             });
             users = users.join(`\n`);
-            const blEmbed = new MessageEmbed()
+            const blEmbed = new EmbedBuilder()
                 .setColor('#803d8f')
                 .setAuthor({ name: interaction.guild.name, iconURL: interaction.guild.iconURL({ format: "png", dynamic: true, size: 2048 })})
                 .addFields({ name: '**Current Blacklist:**', value: users })

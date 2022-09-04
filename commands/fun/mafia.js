@@ -1,5 +1,4 @@
-const Discord = require('discord.js');
-const math = require('mathjs');
+const { ApplicationCommandType, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     name: "mafia",
@@ -7,7 +6,8 @@ module.exports = {
     usage: `\`${process.env.PREFIX}mafia\``,
     disabled: false,
     slash: true,
-    permission: ['MOVE_MEMBERS'],
+    type: ApplicationCommandType.ChatInput,
+    permission: PermissionFlagsBits.MoveMembers,
     execute(interaction){
         let vc = interaction.member.voice?.channel;
         let randGen = [];
@@ -18,7 +18,7 @@ module.exports = {
                 if(guildMember.user.bot) vcSize--;
             }
             if(vcSize < 3) return interaction.reply({ content: 'Voice channel must have 3 non-bot users!' });
-            let mafiaCount = math.ceil(vc.members.size / 3);
+            let mafiaCount = Math.ceil(vc.members.size / 3);
             for (i = 1; i <= vc.members.size; i++){
                 randGen.push(0);
             }

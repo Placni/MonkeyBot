@@ -1,3 +1,4 @@
+const { ApplicationCommandType, ApplicationCommandOptionType, PermissionFlagsBits, InteractionType } = require('discord.js');
 const { findVC } = require('@util/common');
 
 module.exports = {
@@ -7,25 +8,26 @@ module.exports = {
     alias: ["mv"],
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: 'target',
-            type: 'CHANNEL',
-            channelTypes: ['GUILD_VOICE'],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [2],
             description: 'Channel to move users from',
             required: true
         },
         {
             name: 'destination',
-            type: 'CHANNEL',
-            channelTypes: ['GUILD_VOICE'],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [2],
             description: 'Channel to move users into',
             required: true
         }
     ],
-    permission: ['MOVE_MEMBERS'],
-    async execute(interaction, args){ 
-        const isSlash = interaction.isCommand?.();
+    permission: PermissionFlagsBits.MoveMembers,
+    async execute(interaction, args){
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
 
         if (isSlash){
             let targetChannel = await interaction.options.getChannel('target');

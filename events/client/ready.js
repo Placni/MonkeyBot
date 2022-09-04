@@ -1,9 +1,9 @@
-const colors = require('colors')
+const log = require('ololog')
 const mongo = require('@util/mongo');
 
 module.exports = async () => {
-    console.log("MonkeyBot Online" .magenta);
+    log.magenta('Monkeybot Online');
     await mongo().then(() => {
-        console.log('Connected to Mongo' .green);
+        log.green('Connected to Mongo');
     });
 }

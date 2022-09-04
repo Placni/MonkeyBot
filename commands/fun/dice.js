@@ -1,14 +1,15 @@
 const { getRandomValues } = require('crypto').webcrypto;
+const { ApplicationCommandType, InteractionType } = require('discord.js');
 
 module.exports = {
     name: "dice",
     description: "Rolls a round of prison dice",
     usage: `\`${process.env.PREFIX}dice\``,
-    alias: [],
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     async execute(interaction, args, client){
-        const isSlash = interaction.isCommand?.();
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
         var nums = [];
         var content = "";
         var count = 1;

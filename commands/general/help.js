@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { ApplicationCommandType, ApplicationCommandOptionType, EmbedBuilder, InteractionType } = require('discord.js');
 const { sanitizeString } = require('@util/common');
 
 module.exports = {
@@ -8,16 +8,17 @@ module.exports = {
     alias: ["h"],
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: "command",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             description: "Get a detailed description of a specific command",
             required: false
         }
     ],
     async execute(interaction, args, client){
-        const isSlash = interaction.isCommand?.();
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
         const userId = (isSlash) ? interaction.user.id : interaction.author.id;
 
         if(isSlash){
@@ -34,7 +35,7 @@ module.exports = {
         }
 
         function helpEmbed(){
-            const helpEmbed = new MessageEmbed()
+            const helpEmbed = new EmbedBuilder()
             .setColor('#803d8f')
             .setDescription(`<@${client.user.id}> is a Discord bot written by [Myssto](https://github.com/Placni) to learn more about JS`)
             .addFields(
@@ -82,7 +83,7 @@ module.exports = {
                 .map(e => {return '**' + e.charAt(0).toUpperCase() + e.slice(1)})
                 .join('\n');
 
-            const comEmbed = new MessageEmbed()
+            const comEmbed = new EmbedBuilder()
                 .setColor('#803d8f')
                 .setTitle(com[0].name)
                 .setDescription(infoString)

@@ -1,6 +1,6 @@
-const dbhelper = require('@util/dbhelper');
+const { ApplicationCommandType, ApplicationCommandOptionType, InteractionType, EmbedBuilder } = require('discord.js');
 const { findMember, hhmmss } = require('@util/common');
-const { MessageEmbed } = require('discord.js');
+const dbhelper = require('@util/dbhelper');
 const moment = require('moment');
 
 module.exports = {
@@ -9,17 +9,18 @@ module.exports = {
     usage: `\`${process.env.PREFIX}user <target>\``,
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: 'user',
-            type: 'USER',
-            description: 'get the info of this user',
+            type: ApplicationCommandOptionType.User,
+            description: 'Get the info of this user',
             required: false
         }
     ],
     async execute(interaction, args){ 
-        const isSlash = interaction.isCommand?.();
-        let guildMember;
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
+        var guildMember;
 
         if (isSlash){
             guildMember = await findMember(interaction.options.getUser('user'), interaction);
@@ -42,7 +43,7 @@ module.exports = {
             if (vcTime !== 'None') vcTime = hhmmss(vcTime);
             let msgCount = !userdata.msgCount ? 'None' : userdata.msgCount;
 
-            const userEmbed = new MessageEmbed()
+            const userEmbed = new EmbedBuilder()
                 .setColor(member.displayHexColor)
                 .addFields(
                     {name: 'User Info', value: `Joined Server: \`${moment(member.joinedAt).format("MM/d/YYYY, h:mm:ss a")}\`\nCreated on: \`${moment(member.user.createdAt).format("MM/d/YYYY, h:mm:ss a")}\`\nUser ID: \`${member.id}\``},

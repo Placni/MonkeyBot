@@ -1,6 +1,6 @@
-const { MessageEmbed } = require('discord.js');
-const { wordCheck } = require('@commands/guild/trackword');
+const { ApplicationCommandType, ApplicationCommandOptionType, EmbedBuilder, InteractionType } = require('discord.js');
 const { sanitizeString, hhmmss } = require('@util/common');
+const { wordCheck } = require('@commands/guild/trackword');
 const dbhelper = require('@util/dbhelper');
 
 module.exports = {
@@ -10,26 +10,27 @@ module.exports = {
     alias: ["lb"],
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: 'word',
-            type: 'SUB_COMMAND',
-            options: [{ name: 'word', type: 'STRING', description: 'Word to display on the leaderboard', required: true }],
+            type: ApplicationCommandOptionType.Subcommand,
+            options: [{ name: 'word', type: ApplicationCommandOptionType.String, description: 'Word to display on the leaderboard', required: true }],
             description: 'Displays a leaderboard for a tracked word'
         },
         {
             name: 'vctime',
-            type: 'SUB_COMMAND',
+            type: ApplicationCommandOptionType.Subcommand,
             description: 'Displays a leaderboard for time spent in a voice channel'
         },
         {
             name: 'messages',
-            type: 'SUB_COMMAND',
+            type: ApplicationCommandOptionType.Subcommand,
             description: 'Displays a leaderboard for messages sent in text channels'
         }
     ],
     async execute(interaction, args){ 
-        const isSlash = interaction.isCommand?.();
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
         const guildId = interaction.guildId;
         
         if(isSlash){
@@ -99,7 +100,7 @@ module.exports = {
         }
 
         function leaderEmbed(users, values, type){
-            const leaderEmbed = new MessageEmbed()
+            const leaderEmbed = new EmbedBuilder()
                 .setColor('#803d8f')
                 .setAuthor({ name: `Leaderboard for: ${type}`, iconURL: interaction.guild.iconURL({ format: "png", dynamic: true, size: 2048 }) })
                 .addFields(

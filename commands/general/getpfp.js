@@ -1,5 +1,5 @@
+const { ApplicationCommandType, ApplicationCommandOptionType, EmbedBuilder, InteractionType } = require('discord.js');
 const { findMember } = require('@util/common');
-const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     name: "getpfp",
@@ -8,19 +8,19 @@ module.exports = {
     alias: ["pfp", "avatar", "av"],
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: 'user',
+            type: ApplicationCommandOptionType.User,
             description: "Display the profile picture of this user",
             required: false,
-            type: 'USER',
         }
     ],
     async execute(interaction, args) {
-        const isSlash = interaction.isCommand?.();
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
         let format = { format: "png", dynamic: true, size: 2048 };
-        let target;
-        let caller;
+        let target, caller;
 
         if (isSlash) {
             caller = interaction.user;
@@ -35,7 +35,7 @@ module.exports = {
                 if (!target) return interaction.reply("**Couldn't find desired user!**");
             }
         }
-        const pfpEmbed = new MessageEmbed()
+        const pfpEmbed = new EmbedBuilder()
             .setColor('#803d8f')
             .setAuthor({name: `${target.displayName}'s pfp`})
             .setImage(target.displayAvatarURL(format))

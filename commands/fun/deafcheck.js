@@ -1,4 +1,5 @@
 const { findVC } = require('@util/common');
+const { ApplicationCommandType, ApplicationCommandOptionType, PermissionFlagsBits, InteractionType } = require('discord.js');
 
 module.exports = {
     name: "deafcheck",
@@ -7,18 +8,19 @@ module.exports = {
     alias: ["deaf"],
     disabled: false,
     slash: true,
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: 'channel',
-            type: 'CHANNEL',
-            channelTypes: ['GUILD_VOICE'],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [2],
             description: 'Channel to remove users from',
             required: true
         }
     ],
-    permission: ['MOVE_MEMBERS'],
+    permission: PermissionFlagsBits.MoveMembers,
     async execute(interaction, args){ 
-        const isSlash = interaction.isCommand?.();
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
         if(isSlash){
             let targetVC = interaction.options.getChannel('channel');
             console.log(targetVC);
