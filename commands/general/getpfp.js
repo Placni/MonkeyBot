@@ -19,7 +19,7 @@ module.exports = {
     ],
     async execute(interaction, args) {
         const isSlash = interaction.type === InteractionType.ApplicationCommand;
-        let format = { format: "png", dynamic: true, size: 2048 };
+        const format = { format: "png", dynamic: true, size: 2048 };
         let target, caller;
 
         if (isSlash) {
@@ -37,10 +37,10 @@ module.exports = {
         }
         const pfpEmbed = new EmbedBuilder()
             .setColor('#803d8f')
-            .setAuthor({name: `${target.displayName}'s pfp`})
+            .setAuthor({ name: `${target.displayName}'s pfp` })
             .setImage(target.displayAvatarURL(format))
-            .setFooter({text: `Called by ${caller.tag}`})
-            .setTimestamp()
+            .setFooter({ text: `Called by ${caller.tag}` })
+            .setTimestamp();
         interaction.reply({ embeds: [pfpEmbed] });
     }
-}
+};

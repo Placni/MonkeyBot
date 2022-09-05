@@ -4,7 +4,7 @@ module.exports = {
     usage: `\`${process.env.PREFIX}setstatus "<type> <message>"\``,
     alias: ["status"],
     disabled: false,
-    execute(message, args, client){
+    execute(message, args, client) {
         if (message.author.id !== process.env.OWNERID) return;
 
         if(!args.length) return message.reply({ content: 'Specify a status type!' });
@@ -17,4 +17,4 @@ module.exports = {
                 message.reply(error.message);
             });
     }
-}
+};

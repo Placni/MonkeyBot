@@ -25,15 +25,15 @@ module.exports = {
         }
     ],
     permission: PermissionFlagsBits.ManageGuild,
-    async execute(interaction, args){ 
+    async execute(interaction, args) {
         const isSlash = interaction.type === InteractionType.ApplicationCommand;
         const guildId = interaction.guildId;
-        var blackList, target;
+        let blackList, target;
 
-        if(isSlash){
+        if(isSlash) {
             const com = interaction.options.getSubcommand(true);
             await interaction.deferReply({ ephemeral: true });
-            switch(com){
+            switch(com) {
                 case 'print':
                     blackList = await getBl();
                     if(!blackList.length) return interaction.editReply({ content: 'This guild has no users blacklisted!', ephemeral: true });
@@ -43,7 +43,7 @@ module.exports = {
                     return interaction.editReply({ content: await toggleMember(target), ephemeral: true });
             }
         } else {
-            if(!args.length){
+            if(!args.length) {
                 blackList = await getBl();
                 if(!blackList.length) return interaction.reply({ content: 'This guild has no users blacklisted!' });
                 return interaction.reply({ embeds: [blEmbed(blackList)] });
@@ -53,7 +53,7 @@ module.exports = {
             return interaction.reply({ content: await toggleMember(target) });
         }
 
-        function blEmbed(list){
+        function blEmbed(list) {
             let users = [];
             list.forEach(e => {
                 users.push(`<@${e}>`);
@@ -61,13 +61,13 @@ module.exports = {
             users = users.join(`\n`);
             const blEmbed = new EmbedBuilder()
                 .setColor('#803d8f')
-                .setAuthor({ name: interaction.guild.name, iconURL: interaction.guild.iconURL({ format: "png", dynamic: true, size: 2048 })})
-                .addFields({ name: '**Current Blacklist:**', value: users })
+                .setAuthor({ name: interaction.guild.name, iconURL: interaction.guild.iconURL({ format: "png", dynamic: true, size: 2048 }) })
+                .addFields({ name: '**Current Blacklist:**', value: users });
             return blEmbed;
         }
-        async function toggleMember(target){
-            var blackList = await getBl();
-            if(blackList.includes(target)){
+        async function toggleMember(target) {
+            let blackList = await getBl();
+            if(blackList.includes(target)) {
                 blackList = blackList.filter(e => e !== target);
                 dbhelper.globalCache[guildId].blacklist = blackList;
                 await guildSettings.findOneAndUpdate({ _id: guildId }, { blacklist: blackList });
@@ -79,10 +79,9 @@ module.exports = {
                 return `Now blacklisting <@${target.user.id}> in this guild`;
             }
         }
-        async function getBl(){
-            let settings;
-            (!dbhelper.globalCache[guildId]) ? settings = await dbhelper.getGuildSettings() : settings = dbhelper.globalCache[guildId];
+        async function getBl() {
+            const settings = await dbhelper.getGuildSettings(guildId);
             return settings.blacklist;
         }
     }
-}
+};

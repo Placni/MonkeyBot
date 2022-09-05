@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = (client, Discord) => {
-    const loadFiles = (dirPath, collection) => {
+module.exports = (client) => {
+    function loadFiles(dirPath, collection) {
         const files = fs.readdirSync(dirPath);
 
         for (const file of files) {
@@ -17,5 +17,5 @@ module.exports = (client, Discord) => {
     }
     loadFiles(`./commands`, client.commands);
     loadFiles(`./features`, client.features);
-}
+};
 

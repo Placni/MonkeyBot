@@ -10,11 +10,11 @@ module.exports = {
     async execute(interaction) {
         const isSlash = interaction.type === InteractionType.ApplicationCommand;
         if (isSlash) {
-            let reply = await interaction.deferReply({ fetchReply: true, ephemeral: true });
+            const reply = await interaction.deferReply({ fetchReply: true, ephemeral: true });
             interaction.editReply({ content: `🏓 Pong! \nLatency is **${Math.round(reply.createdTimestamp - interaction.createdTimestamp)}ms**`, ephemeral: true });
         } else {
-            let reply = await interaction.reply('Resolving...');
+            const reply = await interaction.reply('Resolving...');
             reply.edit(`🏓 Pong! \nLatency is **${Math.round(reply.createdTimestamp - interaction.createdTimestamp)}ms**`);
         }
     }
-}
+};

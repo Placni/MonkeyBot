@@ -38,33 +38,34 @@ function findVC(input, message) {
 
 // Converts our normal args array into a string
 function ArgsToString(args) {
-    newArgs = args.length > 1 ? args.join(" ") : args;
+    const newArgs = args.length > 1 ? args.join(" ") : args;
     return String(newArgs);
 }
 
 // Returns what permissions a user has
-function PermissionCheck(message, permission) {
+function PermissionCheck(message) {
     return message.member.permissionsIn(message.channel).toArray();
 }
 
 // Breaks down seconds into a string formatted HH:MM:SS
 function hhmmss(secs) {
-    var mins = Math.floor(secs / 60);
-    secs = Math.floor(secs % 60)
-    var hrs = Math.floor(mins / 60);
-    mins = mins % 60
-    return `${hrs}h ${mins}m ${secs}s`
+    let mins = Math.floor(secs / 60);
+    secs = Math.floor(secs % 60);
+    const hrs = Math.floor(mins / 60);
+    mins = mins % 60;
+    return `${hrs}h ${mins}m ${secs}s`;
 }
 
 // Sanitizes user input strings
 // First denotes whether to only return first word or the entire string
-function sanitizeString(str, first){
-    str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
-    if(first){
-        if(str.match(/^(\S+)\s(.*)/)){
-            return str = str.match(/^(\S+)\s(.*)/).at(1)
-        } else return str
-    } else return str.trim();
+function sanitizeString(str, first) {
+    str = str.replace(/[^a-z0-9áéíóúñü .,_-]/gim, "");
+    if(first) {
+        return (str.match(/^(\S+)\s(.*)/))
+            ? str = str.match(/^(\S+)\s(.*)/).at(1)
+            : str;
+    }
+    return str.trim();
 }
 
 module.exports = {
@@ -75,4 +76,4 @@ module.exports = {
     PermissionCheck,
     hhmmss,
     sanitizeString,
-}
+};

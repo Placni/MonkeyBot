@@ -1,4 +1,3 @@
-const messageCreate = require('@root/events/guild/messageCreate');
 const { ApplicationCommandType } = require('discord.js');
 
 module.exports = {
@@ -12,25 +11,24 @@ module.exports = {
         const cmds = client.commands
             .filter(command => command.slash)
             .map(command => {
-                let {
+                const {
                     name,
                     type = ApplicationCommandType.ChatInput,
                     description = "Missing description",
                     options = [],
-                    slash = false,
                     dm_permission = false,
                     permission = null,
                 } = command;
                 const cmd = { name, type, description, options, dm_permission, default_member_permissions: permission };
                 return cmd;
             });
-    
+
         if (!args.length) {
-            await messageCreate.guild.commands?.set(cmds);
+            await interaction.guild.commands?.set(cmds);
             interaction.reply(`Registered ${cmds.length} commands to this guild!`);
         } else {
             await client.commands?.set(cmds);
             interaction.reply(`Registered ${cmds.length} commands globally!`);
         }
     }
-}
+};

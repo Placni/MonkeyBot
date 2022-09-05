@@ -1,4 +1,4 @@
-const log = require('ololog')
+const log = require('ololog');
 const mongo = require('@util/mongo');
 
 module.exports = async () => {
@@ -6,4 +6,4 @@ module.exports = async () => {
     await mongo().then(() => {
         log.green('Connected to Mongo');
     });
-}
+};

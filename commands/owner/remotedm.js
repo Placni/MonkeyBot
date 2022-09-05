@@ -6,14 +6,14 @@ module.exports = {
     usage: `\`${process.env.PREFIX}remotedm <message>\``,
     alias: ["dm"],
     disabled: false,
-    async execute(message, args){ 
+    async execute(message, args) {
         if (message.author.id !== process.env.OWNERID) return;
 
         if(!args) return message.reply({ content: "Specify a target!" });
-        let target = await findMember(args.shift(), message);
+        const target = await findMember(args.shift(), message);
         if(!target) return message.reply({ content: "Couldn't find target!" });
 
-        let str = args.join(' ');
+        const str = args.join(' ');
         try{
             await target.user.send({ content: str });
             return message.reply({ content: "Message sent successfully" });
@@ -21,4 +21,4 @@ module.exports = {
             return message.reply({ content: 'An error occured\nUser may have DMs turned off' });
         }
     }
-}
+};

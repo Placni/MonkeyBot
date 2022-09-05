@@ -1,4 +1,4 @@
-const { PermissionFlagsBits, InteractionType } = require('discord.js');
+const { InteractionType } = require('discord.js');
 const dbhelper = require('@util/dbhelper');
 
 module.exports = async (Discord, client, interaction) => {
@@ -14,8 +14,8 @@ module.exports = async (Discord, client, interaction) => {
             ephemeral: true,
         });
     }
-    if (disabled) return interaction.reply({ content: '**This command is currently disabled**', ephemeral: true })
-    let settings = await dbhelper.getGuildSettings(guildId);
+    if (disabled) return interaction.reply({ content: '**This command is currently disabled**', ephemeral: true });
+    const settings = await dbhelper.getGuildSettings(guildId);
     if (settings.blacklist.includes(interaction.user.id)) return interaction.reply({ content: '**Seems like you have been blacklisted from using me in this guild**', ephemeral: true });
 
     execute(interaction, null, client).catch(err => {
@@ -23,5 +23,5 @@ module.exports = async (Discord, client, interaction) => {
         !interaction.deffered
             ? interaction.reply({ content: '**An error has occured.**', ephemeral: true })
             : interaction.followUp({ content: '**An error has occured.**', ephemeral: true });
-    })
-}
+    });
+};

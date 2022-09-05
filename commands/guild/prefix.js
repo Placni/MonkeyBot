@@ -2,7 +2,7 @@ const { ApplicationCommandType, ApplicationCommandOptionType, PermissionFlagsBit
 const guildSettings = require('@schema/guildSchema');
 const dbhelper = require('@util/dbhelper');
 
-var self = module.exports = {
+const self = module.exports = {
     name: "prefix",
     description: "set the command prefix for your server",
     usage: `\`${process.env.PREFIX}prefix <prefix>\``,
@@ -24,46 +24,44 @@ var self = module.exports = {
         }
     ],
     permission: PermissionFlagsBits.ManageGuild,
-    async execute(interaction, args){
-        const isSlash = interaction.isCommand?.()
+    async execute(interaction, args) {
+        const isSlash = interaction.type === InteractionType.ApplicationCommand;
         const guildId = interaction.guild.id;
+        let newPrefix;
 
-        if(isSlash){
+        if(isSlash) {
             const com = interaction.options.getSubcommand(true);
-            switch(com){
+            switch(com) {
                 case 'print':
                     await self.prefixCheck(guildId).then(prefix => {
-                        return interaction.reply({ content: `Your server's current prefix is \`${prefix}\``, ephemeral: true });});
+                        return interaction.reply({ content: `Your server's current prefix is \`${prefix}\``, ephemeral: true });
+                    });
                 break;
                 case 'change':
-                    const newPrefix = interaction.options.getString('prefix');
+                    newPrefix = interaction.options.getString('prefix');
                     await guildSettings.findOneAndUpdate({ _id: guildId }, { prefix: newPrefix });
                     dbhelper.globalCache[guildId].prefix = newPrefix;
                     return interaction.reply({ content: `Changed server prefix to \`${newPrefix}\``, ephemeral: true });
-                break;
-            }
+                }
             return;
-        } else {
-            if(!args.length){
+        } else if(!args.length) {
                 await this.prefixCheck(interaction).then(prefix => {
                     return interaction.reply(`Your server's current prefix is: \`${prefix}\``);
-                })
-                return;
+                });
+            } else {
+                const newPrefix = args.join('');
+                await guildSettings.findOneAndUpdate({ _id: guildId }, { prefix: newPrefix });
+                dbhelper.globalCache[guildId].prefix = newPrefix;
+                return interaction.reply(`Changed server prefix to \`${newPrefix}\``);
             }
-            let newPrefix = args.join('');
-            await guildSettings.findOneAndUpdate({ _id: guildId }, { prefix: newPrefix });
-            dbhelper.globalCache[guildId].prefix = newPrefix;
-            return interaction.reply(`Changed server prefix to \`${newPrefix}\``);
-        }
     },
 
-    async prefixCheck(guildID){
-        let prefix;
-        if (!dbhelper.globalCache[guildID]){
+    async prefixCheck(guildID) {
+        if (!dbhelper.globalCache[guildID]) {
             await dbhelper.getGuildSettings(guildID);
-            return prefix = dbhelper.globalCache[guildID].prefix;
+            return dbhelper.globalCache[guildID].prefix;
         } else {
-            return prefix = dbhelper.globalCache[guildID].prefix;
+            return dbhelper.globalCache[guildID].prefix;
         }
     }
-}
+};

@@ -26,33 +26,33 @@ module.exports = {
         }
     ],
     permission: PermissionFlagsBits.MoveMembers,
-    async execute(interaction, args){
+    async execute(interaction, args) {
         const isSlash = interaction.type === InteractionType.ApplicationCommand;
 
-        if (isSlash){
-            let targetChannel = await interaction.options.getChannel('target');
-            let destChannel = await interaction.options.getChannel('destination');
-            if(!targetChannel || !destChannel) return interaction.reply({content: 'An error has occured', ephemeral: true});
-            if(targetChannel.members.size == 0) return interaction.reply({content: 'Pick a target channel with users in it!', ephemeral: true});
-            let moved = moveMembers(targetChannel, destChannel);
-            interaction.reply({content: `Moved ${moved} user(s) from **${targetChannel.name}** to **${destChannel.name}**`, ephemeral: true});
+        if (isSlash) {
+            const targetChannel = await interaction.options.getChannel('target');
+            const destChannel = await interaction.options.getChannel('destination');
+            if(!targetChannel || !destChannel) return interaction.reply({ content: 'An error has occured', ephemeral: true });
+            if(targetChannel.members.size == 0) return interaction.reply({ content: 'Pick a target channel with users in it!', ephemeral: true });
+            const moved = moveMembers(targetChannel, destChannel);
+            interaction.reply({ content: `Moved ${moved} user(s) from **${targetChannel.name}** to **${destChannel.name}**`, ephemeral: true });
         } else {
             if (!args.length) return interaction.reply('Specify a target and destination channel!');
-            let targetChannel = findVC(args[0], interaction);
-            let destChannel = findVC(args[1], interaction);
+            const targetChannel = findVC(args[0], interaction);
+            const destChannel = findVC(args[1], interaction);
             if(!targetChannel || !destChannel) return interaction.reply(`Couldn't locate specified channels!`);
             if(targetChannel.members.size == 0) return interaction.reply(`Pick a target channel with users in it!`);
-            let moved = moveMembers(targetChannel, destChannel);
+            const moved = moveMembers(targetChannel, destChannel);
             interaction.reply(`Moved ${moved} user(s) from **${targetChannel.name}** to **${destChannel.name}**`);
         }
 
-        function moveMembers(target, dest){
-            let i = 0
-            for(let [snowflake, guildMember] of target.members){
+        function moveMembers(target, dest) {
+            let i = 0;
+            for(const guildMember of target.members) {
                 guildMember.voice.setChannel(dest);
                 i++;
             }
             return i;
         }
     }
-}
+};
