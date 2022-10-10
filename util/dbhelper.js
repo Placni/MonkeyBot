@@ -1,7 +1,8 @@
 const guildSettings = require('@schema/guildSchema');
+const destinyTokens = require('@schema/destinySchema').default;
 
 module.exports = {
-    globalCache: {},
+    globalCache: { destiny: {} },
     async getGuildSettings(guildId) {
         if(!(guildId in this.globalCache)) {
             let settings = await guildSettings.findOne({ _id: guildId });
@@ -30,5 +31,15 @@ module.exports = {
     async updateUserProfile(guildId, path, data) {
         const newdat = await guildSettings.findOneAndUpdate({ _id: guildId }, { [path]: data }, { new: true });
         this.globalCache[guildId] = newdat;
+    },
+
+    async getDestinyTokens(userId) {
+        if(!(userId in this.globalCache.destiny)) {
+            const data = await destinyTokens.findOne({ _id: userId });
+            if(!data) return undefined;
+            console.log(this.globalCache);
+            return this.globalCache.destiny[userId] = data;
+        }
+        return this.globalCache.destiny[userId];
     }
 };

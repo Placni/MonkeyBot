@@ -7,7 +7,7 @@ module.exports = {
     disabled: false,
     execute(message) {
         if(message.author.id !== process.env.OWNERID) return;
-        dbhelper.globalCache = {};
+        dbhelper.globalCache = { destiny: {} };
         return message.reply({ content: '`cache cleared`', ephemeral: true });
     }
 };
